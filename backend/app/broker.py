@@ -131,12 +131,14 @@ class LiveBroker:
 
     book = "live"
 
-    def __init__(self, ledger: Ledger, gateway):
-        self.ledger, self.gw = ledger, gateway
+    def __init__(self, ledger: Ledger, gateway, demo: bool = False):
+        self.ledger, self.gw, self.demo = ledger, gateway, demo
 
     def preflight(self) -> tuple[bool, str]:
-        if getattr(self.gw, "demo", False):
+        if self.demo:
             return False, "demo data mode"
+        if self.gw is None:
+            return False, "no Kite Connect API key for orders (the free Personal plan is enough)"
         if not settings.live_trading_enabled:
             return False, "LIVE_TRADING_ENABLED is not true on the server"
         if not settings.live_capital:

@@ -115,7 +115,12 @@ def sector_map(index: str) -> tuple[list[tuple[str, str]], str]:
 def build_universe(gateway) -> tuple[list[Stock], str]:
     """Match the sector list to Kite instruments so every stock is tradable on Kite."""
     index = settings.universe_index.lower()
+    via_resolve = hasattr(gateway, "resolve")
+    if index == "all" and via_resolve:
+        index = "nifty500"  # the free MCP has no full instrument dump
     pairs, source = sector_map("nifty500" if index == "all" else index)
+    if via_resolve and settings.universe_index.lower() == "all":
+        source += " (UNIVERSE_INDEX=all needs DATA_MODE=kite; using Nifty 500)"
     sectors = dict(pairs)
     if getattr(gateway, "demo", False):
         gateway.set_symbols(pairs if index != "all" else pairs[:120])
@@ -123,7 +128,12 @@ def build_universe(gateway) -> tuple[list[Stock], str]:
     stocks: list[Stock] = []
     seen: set[str] = set()
     for exch in settings.exchanges:
-        for ins in gateway.instruments(exch):
+        if via_resolve:
+            wanted = [s for s, _ in pairs] + [s for s in settings.extra_symbols if s not in sectors]
+            records = gateway.resolve([s for s in wanted if s not in seen], exch)
+        else:
+            records = gateway.instruments(exch)
+        for ins in records:
             if ins.get("segment") != exch or ins.get("instrument_type") != "EQ":
                 continue
             sym = ins["tradingsymbol"]

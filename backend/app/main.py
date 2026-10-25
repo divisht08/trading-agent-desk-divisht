@@ -103,8 +103,9 @@ def kite_callback(request_token: str = "", status: str = "", state: str = ""):
         return HTMLResponse(CALLBACK_HTML.format(t="Login not completed", m="Kite did not return a token. Try again."), 400)
     if not state or state != saved.get("state"):
         return HTMLResponse(CALLBACK_HTML.format(t="Link expired", m="This login link is old. Send a new one from the desk."), 400)
+    gw = engine.orders_gw if engine.orders_gw is not None else engine.gw
     try:
-        sess = engine.gw.complete_login(request_token)
+        sess = gw.complete_login(request_token)
     except Exception as e:  # noqa: BLE001
         return HTMLResponse(CALLBACK_HTML.format(t="Login failed", m=f"Kite said: {e}"), 400)
     store.set("login_state", None)
@@ -116,8 +117,11 @@ def kite_callback(request_token: str = "", status: str = "", state: str = ""):
 
 
 @app.get("/api/login-link")
-def login_link():
-    return {"url": engine.new_login_link()}
+def login_link(kind: str = "data"):
+    try:
+        return {"url": engine.new_login_link("orders" if kind == "orders" else "data")}
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(409, f"Couldn't get a login link: {e}")
 
 
 @app.post("/api/login/push")

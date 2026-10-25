@@ -1,8 +1,10 @@
 """Market data + session gateways.
 
-KiteGateway  - real Kite Connect (needs the paid Connect plan for quotes/history).
-DemoGateway  - synthetic prices so the app can be tried without a Kite account.
-               Everything it produces is flagged demo=True and the UI says DEMO.
+KiteGateway     - Kite Connect API. With the paid Connect plan it serves quotes and history;
+                  with the free Personal plan it is used only for orders and portfolio.
+KiteMcpGateway  - (kite_mcp.py) free market data through Zerodha's hosted Kite MCP.
+DemoGateway     - synthetic prices so the app can be tried without a Kite account.
+                  Everything it produces is flagged demo=True and the UI says DEMO.
 """
 from __future__ import annotations
 
@@ -111,29 +113,16 @@ class KiteGateway:
     def daily_candles(self, token: int, days: int = 400) -> pd.DataFrame:
         """Daily OHLCV, cached once per trading day per instrument."""
         self._require()
-        today = date.today().isoformat()
-        days = min(int(days), 2000)  # Kite returns at most 2000 daily candles per request
-        row = self.store.one("SELECT fetched, rows FROM candles WHERE token=? AND interval='day' AND days>=? "
-                             "ORDER BY days DESC LIMIT 1", (token, days))
-        if row and row["fetched"] == today:
-            df = _rows_to_df(row["rows"])
-            return df[df.index >= pd.Timestamp(date.today() - timedelta(days=days))]
-        wait = 0.35 - (time.time() - self._last_hist_call)  # historical API: ~3 req/s
-        if wait > 0:
-            time.sleep(wait)
-        self._last_hist_call = time.time()
-        to_d = datetime.now(IST)
-        data = self.kite.historical_data(token, to_d - timedelta(days=days), to_d, "day")
-        df = pd.DataFrame(data)
-        if df.empty:
-            return df
-        df["date"] = pd.to_datetime(df["date"]).dt.tz_localize(None).dt.normalize()
-        df = df.set_index("date")[["open", "high", "low", "close", "volume"]]
-        self.store.execute(
-            "INSERT OR REPLACE INTO candles(token,interval,days,fetched,rows) VALUES(?,?,?,?,?)",
-            (token, "day", days, today, df.reset_index().to_json(orient="records", date_format="iso")),
-        )
-        return df
+
+        def fetch(days_: int) -> list[dict]:
+            wait = 0.35 - (time.time() - self._last_hist_call)  # historical API: ~3 req/s
+            if wait > 0:
+                time.sleep(wait)
+            self._last_hist_call = time.time()
+            to_d = datetime.now(IST)
+            return self.kite.historical_data(token, to_d - timedelta(days=days_), to_d, "day")
+
+        return cached_daily(self.store, token, days, fetch)
 
     # -- account (used by the live broker) ----------------------------------
     def margins(self) -> dict:
@@ -155,6 +144,25 @@ class KiteGateway:
     def order_history(self, order_id: str) -> list[dict]:
         self._require()
         return self.kite.order_history(order_id)
+
+
+def cached_daily(store: Store, token: int, days: int, fetch) -> pd.DataFrame:
+    """Shared daily-candle cache: one fetch per instrument per day, sliced to the length asked for."""
+    today = date.today().isoformat()
+    days = min(int(days), 2000)  # Kite returns at most 2000 daily candles per request
+    row = store.one("SELECT fetched, rows FROM candles WHERE token=? AND interval='day' AND days>=? "
+                    "ORDER BY days DESC LIMIT 1", (token, days))
+    if row and row["fetched"] == today:
+        df = _rows_to_df(row["rows"])
+        return df[df.index >= pd.Timestamp(date.today() - timedelta(days=days))]
+    df = pd.DataFrame(fetch(days))
+    if df.empty:
+        return df
+    df["date"] = pd.to_datetime(df["date"]).dt.tz_localize(None).dt.normalize()
+    df = df.set_index("date")[["open", "high", "low", "close", "volume"]]
+    store.execute("INSERT OR REPLACE INTO candles(token,interval,days,fetched,rows) VALUES(?,?,?,?,?)",
+                  (token, "day", days, today, df.reset_index().to_json(orient="records", date_format="iso")))
+    return df
 
 
 def _rows_to_df(rows_json: str) -> pd.DataFrame:
@@ -273,8 +281,24 @@ class DemoGateway:
 
 
 def make_gateway(store: Store):
+    """The market-data gateway for DATA_MODE."""
     if settings.is_demo:
         return DemoGateway(store)
+    if settings.data_mode == "kite_mcp":
+        from .kite_mcp import KiteMcpGateway
+        return KiteMcpGateway(store)
     if not settings.kite_api_key or not settings.kite_api_secret:
-        raise RuntimeError("Set KITE_API_KEY and KITE_API_SECRET, or DATA_MODE=demo to try the app.")
+        raise RuntimeError("DATA_MODE=kite needs KITE_API_KEY and KITE_API_SECRET (paid Connect plan). "
+                           "Use DATA_MODE=kite_mcp for free data, or DATA_MODE=demo to try the app.")
     return KiteGateway(store)
+
+
+def make_order_gateway(store: Store, data_gw):
+    """Where real orders go. Kite Connect (the free Personal plan is enough) or None if no key is set."""
+    if getattr(data_gw, "demo", False):
+        return None
+    if isinstance(data_gw, KiteGateway):
+        return data_gw
+    if settings.kite_api_key and settings.kite_api_secret:
+        return KiteGateway(store)
+    return None

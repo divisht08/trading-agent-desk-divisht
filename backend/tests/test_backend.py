@@ -96,6 +96,7 @@ def test_arm_automatic_when_all_gates_pass(env, monkeypatch):
     from app.security import totp_now
     eng = main.engine
     monkeypatch.setattr(eng.live, "preflight", lambda: (True, ""))
+    monkeypatch.setattr(eng, "orders_gw", type("G", (), {"is_ready": lambda self: True, "session": lambda self: {}})())
     monkeypatch.setattr(main.settings, "live_capital", 50000.0)
     secret = eng.twostep.start_setup("pw")["secret"]
     eng.twostep.confirm_setup(totp_now(secret))

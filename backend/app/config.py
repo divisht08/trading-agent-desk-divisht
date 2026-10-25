@@ -22,10 +22,15 @@ def _list(name: str, default: str = "") -> list[str]:
 
 @dataclass
 class Settings:
-    # data source: "kite" (real account) or "demo" (synthetic prices, clearly labelled)
-    data_mode: str = field(default_factory=lambda: os.getenv("DATA_MODE", "kite"))
+    # data source:
+    #   "kite_mcp" - free data through Zerodha's hosted Kite MCP (default)
+    #   "kite"     - Kite Connect API data (paid Connect plan, ₹500/month)
+    #   "demo"     - synthetic prices, clearly labelled
+    data_mode: str = field(default_factory=lambda: os.getenv("DATA_MODE", "kite_mcp"))
+    kite_mcp_url: str = field(default_factory=lambda: os.getenv("KITE_MCP_URL", "https://mcp.kite.trade/mcp"))
 
-    # Kite Connect
+    # Kite Connect. With DATA_MODE=kite_mcp these are only needed for Automatic mode (orders),
+    # and the free Personal plan is enough.
     kite_api_key: str = field(default_factory=lambda: os.getenv("KITE_API_KEY", ""))
     kite_api_secret: str = field(default_factory=lambda: os.getenv("KITE_API_SECRET", ""))
     public_url: str = field(default_factory=lambda: os.getenv("PUBLIC_URL", "http://localhost:8000"))
@@ -48,6 +53,17 @@ class Settings:
     quick_model: str = field(default_factory=lambda: os.getenv("QUICK_MODEL", "claude-haiku-5-5"))
     use_web_news: bool = field(default_factory=lambda: _bool("USE_WEB_NEWS", True))
     candidates_per_cycle: int = field(default_factory=lambda: int(os.getenv("CANDIDATES_PER_CYCLE", "5")))
+    # Claude spend control: a stock is re-debated only when its last debate is older than
+    # DEBATE_REFRESH_MIN or its score moved by DEBATE_SCORE_DELTA; spend stops at the daily cap.
+    debate_refresh_min: int = field(default_factory=lambda: int(os.getenv("DEBATE_REFRESH_MIN", "180")))
+    debate_score_delta: float = field(default_factory=lambda: _float("DEBATE_SCORE_DELTA", 15.0) or 15.0)
+    claude_daily_budget_usd: float = field(default_factory=lambda: _float("CLAUDE_DAILY_BUDGET_USD", 2.0) or 0.0)
+    # $ per million tokens and per 1,000 web searches. Set these to your actual prices.
+    price_quick_in: float = field(default_factory=lambda: _float("PRICE_QUICK_IN", 1.0) or 0.0)
+    price_quick_out: float = field(default_factory=lambda: _float("PRICE_QUICK_OUT", 5.0) or 0.0)
+    price_deep_in: float = field(default_factory=lambda: _float("PRICE_DEEP_IN", 3.0) or 0.0)
+    price_deep_out: float = field(default_factory=lambda: _float("PRICE_DEEP_OUT", 15.0) or 0.0)
+    price_web_search_1k: float = field(default_factory=lambda: _float("PRICE_WEB_SEARCH_1K", 10.0) or 0.0)
 
     # ML model
     ml_weight: float = field(default_factory=lambda: _float("ML_WEIGHT", 0.4) or 0.0)

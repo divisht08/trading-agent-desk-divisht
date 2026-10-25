@@ -14,14 +14,14 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 
-from deskml.agents import Candidate, DecisionDesk, DeskConfig
+from deskml.agents import Candidate, Decision, DecisionDesk, DeskConfig, Prices, Spend
 from deskml.features import build_features
 from deskml.model import Registry, blend, train_and_evaluate
 from deskml.signals import live_snapshot, stance_of
 
 from .broker import Ledger, LiveBroker, PaperBroker
 from .config import settings
-from .market import NIFTY50_KEY, NIFTY50_TOKEN, SessionMissing, make_gateway
+from .market import NIFTY50_KEY, NIFTY50_TOKEN, SessionMissing, make_gateway, make_order_gateway
 from .notify import notify
 from .security import TwoStep
 from .store import Store, now_ist, ts
@@ -41,12 +41,19 @@ class Engine:
     def __init__(self, store: Store):
         self.store = store
         self.gw = make_gateway(store)
+        self.orders_gw = make_order_gateway(store, self.gw)
         self.ledgers = {"test": Ledger(store, "test", settings.paper_capital),
                         "live": Ledger(store, "live", settings.live_capital or 0.0)}
         self.paper = PaperBroker(self.ledgers["test"])
-        self.live = LiveBroker(self.ledgers["live"], self.gw)
+        self.live = LiveBroker(self.ledgers["live"], self.orders_gw, demo=self.gw.demo)
+        prices = Prices(settings.price_quick_in, settings.price_quick_out, settings.price_deep_in,
+                        settings.price_deep_out, settings.price_web_search_1k)
+        self.spend = Spend(settings.claude_daily_budget_usd,
+                           lambda: store.get(f"claude_spend:{now_ist().date().isoformat()}", 0.0),
+                           lambda v: store.set(f"claude_spend:{now_ist().date().isoformat()}", v))
         self.desk = DecisionDesk(DeskConfig(settings.anthropic_api_key, settings.deep_model, settings.quick_model,
-                                            settings.use_web_news, settings.allow_intraday_shorts))
+                                            settings.use_web_news, settings.allow_intraday_shorts, prices),
+                                 self.spend)
         self.registry = Registry(settings.model_dir)
         self.twostep = TwoStep(store)
         self._lock = threading.Lock()
@@ -98,6 +105,8 @@ class Engine:
             raise PermissionError(f"Automatic mode isn't available: {why}")
         if not self.gw.is_ready():
             raise PermissionError("Log in to Kite first")
+        if not self.orders_gw.is_ready():
+            raise PermissionError("Log in to Kite for orders first (Controls, Kite login)")
         self.twostep.check(password, code)
         led = self.ledgers["live"]
         if led.start_capital <= 0:
@@ -137,6 +146,12 @@ class Engine:
                        "trained_until": model.trained_until} if model else None),
             "ml_weight": settings.ml_weight,
             "session": {"ok": sess is not None, **(sess or {})},
+            "data_source": settings.data_mode,
+            "orders_session": ({"configured": True, "ok": self.orders_gw.is_ready(), **(self.orders_gw.session() or {})}
+                               if self.orders_gw is not None and self.orders_gw is not self.gw
+                               else {"configured": self.orders_gw is not None, "ok": sess is not None, "same": True}),
+            "claude": {"spent_today_usd": round(self.spend.today, 3), "daily_cap_usd": settings.claude_daily_budget_usd,
+                       "refresh_min": settings.debate_refresh_min},
             "universe_source": self.store.get("universe_source", ""),
             "universe_index": settings.universe_index,
             "risk_limits": {"max_position_pct": settings.max_position_pct,
@@ -147,16 +162,28 @@ class Engine:
         }
 
     # ------------------------------------------------------------------ login
-    def new_login_link(self) -> str:
+    def new_login_link(self, kind: str = "data") -> str:
+        """kind='data' logs in the market-data source; kind='orders' the Kite Connect order API."""
+        gw = self.orders_gw if kind == "orders" else self.gw
+        if gw is None:
+            raise RuntimeError("No Kite Connect API key is set for orders")
         state = secrets.token_urlsafe(16)
         self.store.set("login_state", {"state": state, "ts": ts()})
-        return self.gw.login_url(state)
+        return gw.login_url(state)
 
     def send_login_to_phone(self, reason: str = "Kite login needed for today") -> list[str]:
-        link = self.new_login_link()
         self.store.set("last_login_push", ts())
-        return notify("Kite login needed", f"{reason}. Tap to log in with Kite; the agent resumes by itself.", link,
-                      priority="high")
+        sent: list[str] = []
+        if not self.gw.is_ready():
+            sent += notify("Kite login needed", f"{reason}. Tap to log in with Kite; the agent resumes by itself.",
+                           self.new_login_link("data"), priority="high")
+        needs_orders = (self.orders_gw is not None and self.orders_gw is not self.gw
+                        and (self.mode == "automatic" or settings.live_trading_enabled)
+                        and not self.orders_gw.is_ready())
+        if needs_orders:
+            sent += notify("Kite orders login", "Second login for placing real orders (Kite Connect).",
+                           self.new_login_link("orders"), priority="high")
+        return sorted(set(sent))
 
     # ------------------------------------------------------------------ cycle
     def run_cycle(self, trigger: str = "schedule") -> int | None:
@@ -258,7 +285,13 @@ class Engine:
                                  snap["reasons"], snap["features"], pos["qty"] if pos else 0,
                                  pos["avg_price"] if pos else 0.0, self._memory(book, s.symbol),
                                  ml_prob=snap.get("ml_prob"), rule_score=snap.get("rule_score"))
-                d = self.desk.decide(cand, lambda st, m, dd=None: e("debate", "active" if st == "info" else st, m, dd))
+                d = self._cached_decision(book, cand)
+                if d is None:
+                    d = self.desk.decide(cand, lambda st, m, dd=None: e("debate", "active" if st == "info" else st, m, dd))
+                    self._remember_decision(book, cand, d)
+                else:
+                    e("debate", "active", f"{s.symbol}: reusing the debate from {d.debate.get('_at', '')[11:16]} "
+                      "(score has not moved much)")
                 decisions.append((cand, d))
                 e("debate", "active", f"{s.symbol}: {d.action} (conviction {d.conviction:.0%})",
                   {"symbol": s.symbol, "action": d.action})
@@ -340,6 +373,28 @@ class Engine:
           + (f" (rules {1 - settings.ml_weight:.0%} + model {settings.ml_weight:.0%})" if model else " (rules only)"),
           {"bullish": bull, "bearish": bear, "neutral": len(snaps) - bull - bear})
         return snaps
+
+    def _cached_decision(self, book: str, c: Candidate) -> Decision | None:
+        """Reuse a recent Claude debate when nothing material changed, to keep API spend down."""
+        if self.desk.engine != "claude":
+            return None
+        rec = self.store.get(f"last_debate:{book}:{c.symbol}")
+        if not rec:
+            return None
+        age_min = (now_ist() - datetime.fromisoformat(rec["at"])).total_seconds() / 60
+        if age_min > settings.debate_refresh_min or abs(c.score - rec["score"]) >= settings.debate_score_delta \
+                or rec["held_qty"] != c.held_qty:
+            return None
+        d = Decision(**rec["decision"])
+        d.engine = "claude (reused)"
+        d.debate = {**d.debate, "_at": rec["at"]}
+        return d
+
+    def _remember_decision(self, book: str, c: Candidate, d: Decision) -> None:
+        if d.engine == "claude":
+            self.store.set(f"last_debate:{book}:{c.symbol}",
+                           {"at": now_ist().isoformat(timespec="seconds"), "score": c.score, "held_qty": c.held_qty,
+                            "decision": d.__dict__})
 
     def _finish(self, run_id: int, status: str, summary: dict) -> int:
         self.store.execute("UPDATE runs SET finished=?, status=?, summary=? WHERE id=?",
