@@ -72,6 +72,27 @@ make demo        # http://localhost:8000, password: demo
 
 Demo mode uses synthetic prices, every screen says so, and real orders are impossible in it.
 
+## Run it on Windows
+
+1. Install the tools once (PowerShell):
+   ```powershell
+   winget install Python.Python.3.12 OpenJS.NodeJS.LTS Git.Git
+   ```
+   Close and reopen PowerShell afterwards.
+2. Get the code and try the demo:
+   ```powershell
+   git clone https://github.com/divisht08/trading-agent-desk-divisht
+   cd trading-agent-desk-divisht
+   powershell -ExecutionPolicy Bypass -File scripts\start-windows.ps1 -Demo
+   ```
+   The first run takes a few minutes while it installs. Your browser opens http://localhost:8000. The password is `demo`.
+3. Use your real Kite data in Test mode: run the script without `-Demo`. It creates `.env` and opens it in
+   Notepad. Set `DASHBOARD_PASSWORD`, save, and run it again. Sign in, open **Controls**, choose **Log in here**
+   and log in to Kite. The agent runs every 15 minutes during market hours while the window stays open.
+4. After pulling new code, add `-Rebuild`.
+
+The laptop has to stay on and awake for scheduled cycles. For hands-off running every day, use a server (below).
+
 ## Run it for real
 
 1. **Kite**: Test mode needs nothing beyond your Zerodha login, because data comes free through the Kite MCP.
