@@ -1,9 +1,36 @@
-"""Runtime configuration from environment variables (see .env.example at the repo root)."""
+"""Runtime configuration from environment variables (see .env.example at the repo root).
+
+A `.env` file is read too (ENV_FILE, else the repo root, else the current folder), so local
+runs on Windows or macOS need no extra tooling. Real environment variables always win.
+"""
 from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def load_env_file(path: Path | None = None) -> Path | None:
+    """Read KEY=VALUE lines into os.environ without overriding what is already set."""
+    candidates = [Path(p) for p in [os.getenv("ENV_FILE")] if p] + [REPO_ROOT / ".env", Path.cwd() / ".env"]
+    for f in [path] if path else candidates:
+        if f and f.is_file():
+            for raw in f.read_text(encoding="utf-8-sig").splitlines():
+                line = raw.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, val = line.split("=", 1)
+                key, val = key.strip(), val.strip()
+                if len(val) >= 2 and val[0] == val[-1] and val[0] in "\"'":
+                    val = val[1:-1]
+                os.environ.setdefault(key, val)
+            return f
+    return None
+
+
+load_env_file()
 
 
 def _bool(name: str, default: bool = False) -> bool:
