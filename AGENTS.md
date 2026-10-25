@@ -6,7 +6,7 @@ Guide for anyone (human or AI) changing this repo. Read this before editing.
 
 | Path | What lives there | Language |
 |---|---|---|
-| `backend/app/` | FastAPI API, trading engine (the cycle), Kite gateway, brokers and books, scheduler, security (password + TOTP), notifications | Python 3.12 |
+| `backend/app/` | FastAPI API, trading engine (the cycle), Kite gateways (`kite_mcp.py` free data, `market.py` Kite Connect + demo), brokers and books, scheduler, security (password + TOTP), notifications | Python 3.12 |
 | `ml/deskml/` | Rule signals, ML features, model training and registry, backtester, Zerodha charges, the Claude decision desk | Python 3.12 |
 | `ml/deskml/agents/prompts/` | Prompts for analyst, bull, bear, portfolio manager. Edit these to change desk behaviour | Markdown |
 | `frontend/src/` | React + TypeScript dashboard (Vite). `lib/api.ts` is the typed API client, `lib/desk.tsx` the shared state and live stream | TS |
@@ -37,7 +37,9 @@ make dev-web          # React dev server on :5173, proxies /api to :8000
    next bar's open. `ml/tests/test_ml.py` checks this; extend it when touching features or the model.
 4. **Demo data is always labelled.** `DATA_MODE=demo` can never place live orders, and the UI shows a banner.
 5. **Never fabricate prices.** If Kite data is missing, the cycle stops at that stage and says so.
-6. **Charges come from zerodha.com/charges.** Update `ml/deskml/costs.py` (with the date checked) when they change.
+6. **Orders never go through the Kite MCP.** It is a data source only; real orders use Kite Connect
+   (`Engine.orders_gw`). Keep Claude spend behind `Spend` and the debate-reuse rule.
+7. **Charges come from zerodha.com/charges.** Update `ml/deskml/costs.py` (with the date checked) when they change.
 
 ## Where things happen
 

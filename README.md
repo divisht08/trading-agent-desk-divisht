@@ -46,6 +46,23 @@ Automatic mode refuses to arm unless every check passes:
 Codes can't be reused, and five wrong tries lock the switch for 15 minutes. With
 `AUTO_REVERIFY_DAILY=true`, Automatic drops back to Test at 06:00 every day.
 
+## What it costs to run
+
+| Piece | Cost |
+|---|---|
+| Market data (Test and Automatic) | **Free** with `DATA_MODE=kite_mcp`: Zerodha's hosted Kite MCP, the same connector Claude chat uses |
+| Placing real orders (Automatic only) | **Free** with a Kite Connect **Personal** API key |
+| Kite Connect paid data plan | Optional (₹500/month): set `DATA_MODE=kite` if the MCP is ever unavailable or rate-limited |
+| Claude API (the debate) | Pay per use, capped by `CLAUDE_DAILY_BUDGET_USD` (default $2/day). Without a key the rule set decides, at no cost |
+| Server | A small VPS with a static IP |
+
+Zerodha doesn't publish terms for server-side use of the hosted MCP, so it could change or be rate-limited.
+That is why the paid data plan stays a one-line switch.
+
+To keep Claude costs down, a stock is debated again only when its score moves by
+`DEBATE_SCORE_DELTA` points, its holding changes, or `DEBATE_REFRESH_MIN` minutes have passed.
+Otherwise the last debate is reused, and the dashboard says so.
+
 ## Try it now (no Kite account needed)
 
 ```bash
@@ -57,16 +74,18 @@ Demo mode uses synthetic prices, every screen says so, and real orders are impos
 
 ## Run it for real
 
-1. **Kite Connect**: subscribe at developers.kite.trade, create an app, and set its Redirect URL to
+1. **Kite**: Test mode needs nothing beyond your Zerodha login, because data comes free through the Kite MCP.
+   For Automatic mode later, create a free **Personal** app at developers.kite.trade and set its Redirect URL to
    `https://YOUR-DOMAIN/kite/callback`.
 2. **Server**: a small always-on Linux VPS with a **static IP**. Exchange rules require a registered
    static IP for API orders, so register it in the Kite developer console before using Automatic mode.
-3. **Configure**: `cp .env.example .env` and fill it in. At minimum set `KITE_API_KEY`,
-   `KITE_API_SECRET`, `PUBLIC_URL`, `DASHBOARD_PASSWORD`, `SECRET_KEY` and one phone channel
-   (`NTFY_TOPIC` or Telegram).
+3. **Configure**: `cp .env.example .env` and fill it in. For Test mode set `PUBLIC_URL`,
+   `DASHBOARD_PASSWORD`, `SECRET_KEY` and one phone channel (`NTFY_TOPIC` or Telegram). Add
+   `ANTHROPIC_API_KEY` for the Claude debate.
 4. **Start**: put your domain in `Caddyfile`, then `docker compose up -d --build`.
 5. **Each morning**: a login link arrives on your phone at 08:45. Tap it, log in on Kite's page, and the
-   desk runs by itself until the close.
+   desk runs by itself until the close. In Automatic mode with free data, a second link logs in the
+   order API. If the server restarts, the MCP needs a fresh login, and the desk sends a link.
 6. **Model**: press **Train now** in the Model section once you're logged in. After that it retrains
    every Friday after the close.
 
@@ -79,8 +98,8 @@ ahead of Nifty after charges, with a drawdown you'd accept with real money. Then
 2. Ask Zerodha how they treat AI-generated orders from your own API app under SEBI's retail-algo
    framework (circular of 4 Feb 2025, NSE standards of 5 May 2025). Self-built strategies under
    10 orders/second need no exchange registration, but confirm for your case.
-3. Set `LIVE_TRADING_ENABLED=true` and a small `LIVE_CAPITAL`, restart, and set up the authenticator
-   under Controls.
+3. Add your free Personal `KITE_API_KEY`/`KITE_API_SECRET`, set `LIVE_TRADING_ENABLED=true` and a small
+   `LIVE_CAPITAL`, restart, and set up the authenticator under Controls.
 4. Consider `MAX_POSITION_PCT`, `DAILY_LOSS_LIMIT_PCT` and `STOP_LOSS_PCT` first. They're off by default.
 5. Switch to **Automatic** in the top bar.
 
