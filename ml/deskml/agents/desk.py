@@ -49,12 +49,40 @@ DECISION_TOOL = {
 
 
 @dataclass
+class Prices:
+    """US$ per million tokens, and per 1,000 web searches."""
+    quick_in: float = 1.0
+    quick_out: float = 5.0
+    deep_in: float = 3.0
+    deep_out: float = 15.0
+    web_search_1k: float = 10.0
+
+
+class Spend:
+    """Daily Claude spend gate. `load`/`save` persist today's total (the backend keeps it in SQLite)."""
+
+    def __init__(self, cap_usd: float, load: Callable[[], float], save: Callable[[float], None]):
+        self.cap, self._load, self._save = cap_usd, load, save
+
+    @property
+    def today(self) -> float:
+        return float(self._load() or 0.0)
+
+    def allowed(self) -> bool:
+        return self.cap <= 0 or self.today < self.cap
+
+    def add(self, usd: float) -> None:
+        self._save(round(self.today + usd, 6))
+
+
+@dataclass
 class DeskConfig:
     api_key: str = ""
     deep_model: str = "claude-sonnet-5-5"
     quick_model: str = "claude-haiku-5-5"
     use_web_news: bool = True
     allow_shorts: bool = False
+    prices: Prices = field(default_factory=Prices)
 
 
 @dataclass
@@ -109,8 +137,9 @@ def brief(c: Candidate) -> str:
 
 
 class DecisionDesk:
-    def __init__(self, cfg: DeskConfig):
+    def __init__(self, cfg: DeskConfig, spend: Spend | None = None):
         self.cfg = cfg
+        self.spend = spend
         self.client = None
         if cfg.api_key:
             from anthropic import Anthropic
@@ -120,9 +149,30 @@ class DecisionDesk:
     def engine(self) -> str:
         return "claude" if self.client else "rules"
 
+    def _cost(self, msg, deep: bool) -> float:
+        u = getattr(msg, "usage", None)
+        if u is None:
+            return 0.0
+        p = self.cfg.prices
+        rin, rout = (p.deep_in, p.deep_out) if deep else (p.quick_in, p.quick_out)
+        tokens_in = (getattr(u, "input_tokens", 0) or 0) + (getattr(u, "cache_creation_input_tokens", 0) or 0) \
+            + (getattr(u, "cache_read_input_tokens", 0) or 0)
+        cost = tokens_in * rin / 1e6 + (getattr(u, "output_tokens", 0) or 0) * rout / 1e6
+        stu = getattr(u, "server_tool_use", None)
+        searches = (getattr(stu, "web_search_requests", 0) or 0) if stu else 0
+        return cost + searches * p.web_search_1k / 1000
+
+    def _charge(self, msg, deep: bool) -> None:
+        if self.spend:
+            self.spend.add(self._cost(msg, deep))
+
     def decide(self, c: Candidate, emit: Emit) -> Decision:
         if not self.client:
             return self._rules(c)
+        if self.spend and not self.spend.allowed():
+            d = self._rules(c)
+            d.engine = "rules (Claude budget reached)"
+            return d
         try:
             return self._claude(c, emit)
         except Exception as e:  # noqa: BLE001 - one stock must not kill the cycle
@@ -137,6 +187,7 @@ class DecisionDesk:
             kw["tools"] = [{"type": WEB_SEARCH_TOOL, "name": "web_search", "max_uses": 3}]
         msg = self.client.messages.create(model=model, max_tokens=max_tokens, system=system,
                                           messages=[{"role": "user", "content": user}], **kw)
+        self._charge(msg, deep=model == self.cfg.deep_model)
         return "\n".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
 
     def _claude(self, c: Candidate, emit: Emit) -> Decision:
@@ -158,6 +209,7 @@ class DecisionDesk:
                        f"{b}\n\nAnalyst:\n{analyst}\n\nBull:\n{bull}\n\nBear:\n{bear}\n\nSubmit your decision."}],
             tools=[DECISION_TOOL], tool_choice={"type": "tool", "name": "submit_decision"},
         )
+        self._charge(msg, deep=True)
         d = next(x.input for x in msg.content if getattr(x, "type", "") == "tool_use")
         return Decision(action=d["action"], conviction=float(d.get("conviction", 0)),
                         size_pct=float(d.get("size_pct", 0)), horizon=d.get("horizon", "days"),
