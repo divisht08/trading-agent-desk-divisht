@@ -1,0 +1,22 @@
+# secrets and runtime data
+.env
+.env.*
+!.env.example
+data/
+*.sqlite3*
+models/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+build/
+
+# node
+node_modules/
+frontend/dist/
+.vite/
+
+.DS_Store

@@ -1,0 +1,5 @@
+trade.example.com {
+	reverse_proxy desk:8000 {
+		flush_interval -1
+	}
+}

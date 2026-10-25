@@ -1,0 +1,19 @@
+services:
+  desk:
+    build: .
+    env_file: .env
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    # One process only: the scheduler runs inside the app.
+  caddy:
+    # HTTPS for PUBLIC_URL. Put your domain in Caddyfile.
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    restart: unless-stopped
+    depends_on: [desk]
+volumes:
+  caddy_data:
