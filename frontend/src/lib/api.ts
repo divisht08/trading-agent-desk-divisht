@@ -13,7 +13,10 @@ export interface Status {
   engine: "claude" | "rules";
   model: { version: string; auc: number | null; trained_until: string } | null;
   ml_weight: number;
-  session: Session;
+  session: Session & { via?: string };
+  data_source: "kite_mcp" | "kite" | "demo";
+  orders_session: { configured: boolean; ok: boolean; same?: boolean; user_id?: string };
+  claude: { spent_today_usd: number; daily_cap_usd: number; refresh_min: number };
   universe_source: string; universe_index: string;
   risk_limits: { max_position_pct: number | null; daily_loss_limit_pct: number | null; stop_loss_pct: number | null; max_positions: number };
   cycle_minutes: number;
@@ -90,7 +93,7 @@ export const api = {
   setTest: () => post<Status>("/api/mode", { mode: "test" }),
   armAutomatic: (password: string, code: string) => post<Status>("/api/mode", { mode: "automatic", password, code }),
   halt: (halted: boolean, flatten = false) => post<Status & { flattened: number }>("/api/halt", { halted, flatten }),
-  loginLink: () => get<{ url: string }>("/api/login-link"),
+  loginLink: (kind: "data" | "orders" = "data") => get<{ url: string }>(`/api/login-link?kind=${kind}`),
   pushLogin: () => post<{ sent: string[] }>("/api/login/push"),
   resetTest: (capital?: number) => post("/api/test/reset", { capital }),
   fixLive: (symbol: string, exchange: string, qty: number) => post("/api/live/fix-position", { symbol, exchange, qty }),

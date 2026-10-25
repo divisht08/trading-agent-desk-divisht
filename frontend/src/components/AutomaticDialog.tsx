@@ -17,6 +17,9 @@ export default function AutomaticDialog({ onClose }: { onClose: () => void }) {
     [!s.demo, "Using your real Kite data (not demo)"],
     [s.automatic.available, s.automatic.available ? `Server allows real orders, budget ${inr(s.automatic.live_capital)}` : `Server switch: ${s.automatic.blocked_reason}`],
     [s.session.ok, "Logged in to Kite today"],
+    [s.orders_session.configured && s.orders_session.ok, s.orders_session.configured
+      ? "Logged in to Kite for orders today (Controls, Kite login)"
+      : "Kite Connect API key for orders is set (the free Personal plan is enough)"],
     [s.password_set, "Dashboard password is set"],
     [s.twostep.enabled, "Authenticator app is set up (Controls, Two-step verification)"],
   ];

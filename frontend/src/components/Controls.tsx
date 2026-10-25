@@ -62,10 +62,13 @@ export default function Controls() {
     const r = await api.pushLogin();
     toast(r.sent.length ? `Login link sent to ${r.sent.join(" and ")}` : "No phone alerts set up. Use Log in here.");
   }
-  async function openLogin() {
-    const r = await api.loginLink();
-    window.open(r.url, "_blank", "noopener");
+  async function openLogin(kind: "data" | "orders" = "data") {
+    try {
+      const r = await api.loginLink(kind);
+      window.open(r.url, "_blank", "noopener");
+    } catch (e) { toast((e as Error).message); }
   }
+  const SOURCE: Record<string, string> = { kite_mcp: "Kite MCP (free)", kite: "Kite Connect (paid data plan)", demo: "Demo prices" };
   async function flatten() {
     if (!window.confirm(`Stop the agent and close every position in the ${s!.book} book at market?`)) return;
     const r = await api.halt(true, true);
@@ -93,14 +96,19 @@ export default function Controls() {
           <h3>Kite login</h3>
           <p>Kite logs every app out each morning. The agent sends a login link to your phone at the reminder time and whenever a cycle finds no session.</p>
           <dl className="kv">
+            <dt>Market data from</dt><dd>{SOURCE[s.data_source] ?? s.data_source}</dd>
             <dt>Status</dt><dd>{s.session.ok ? "Logged in" : "Not logged in"}</dd>
             {s.session.ok && <><dt>User</dt><dd>{s.session.user_name || s.session.user_id}</dd>
               <dt>Valid until</dt><dd>{(s.session.valid_until || "").replace("T", " ").slice(0, 16)}</dd></>}
+            {!s.orders_session.same && <><dt>Orders login (Kite Connect)</dt>
+              <dd>{!s.orders_session.configured ? "no API key (Test mode only)" : s.orders_session.ok ? "logged in" : "not logged in"}</dd></>}
             <dt>Phone alerts</dt><dd>{s.phone_channels.length ? s.phone_channels.join(", ") : "not set up"}</dd>
           </dl>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button className="btn primary" onClick={pushLogin}>Send login link to my phone</button>
-            <button className="btn" onClick={openLogin}>Log in here</button>
+            <button className="btn" onClick={() => openLogin("data")}>Log in here</button>
+            {!s.orders_session.same && s.orders_session.configured &&
+              <button className="btn" onClick={() => openLogin("orders")}>Log in for orders</button>}
           </div>
         </div>
         <div className="control">
@@ -141,6 +149,8 @@ export default function Controls() {
             <dt>Max per position</dt><dd>{off(rl.max_position_pct)}</dd><dt>Daily loss stop</dt><dd>{off(rl.daily_loss_limit_pct)}</dd>
             <dt>Stop loss per trade</dt><dd>{off(rl.stop_loss_pct)}</dd><dt>Max open positions</dt><dd>{rl.max_positions}</dd>
             <dt>Cycle every</dt><dd>{s.cycle_minutes} min</dd><dt>Decision desk</dt><dd>{s.engine === "claude" ? "Claude debate" : "Rule set (no API key)"}</dd>
+            {s.engine === "claude" && <><dt>Claude spend today</dt><dd>${s.claude.spent_today_usd.toFixed(2)} of ${s.claude.daily_cap_usd.toFixed(2)}</dd>
+              <dt>Re-debate a stock after</dt><dd>{s.claude.refresh_min} min, or a big score move</dd></>}
           </dl>
         </div>
       </div>
