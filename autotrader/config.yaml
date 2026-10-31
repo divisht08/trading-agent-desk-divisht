@@ -1,0 +1,82 @@
+# Trading agent configuration. Only `capital` needs your input.
+mode: paper            # paper | live  (live also needs LIVE_UNLOCK env var, see README)
+capital: 100000        # total capital in INR the agent may use. CHANGE THIS.
+
+market:
+  open: "09:15"
+  close: "15:30"
+  intraday_entry_start: "09:30"   # no intraday entries before this (skip opening noise)
+  intraday_entry_end: "14:45"     # no new intraday entries after this
+  intraday_squareoff: "15:12"     # force-close all MIS positions
+  tick_seconds: 60
+
+risk:
+  risk_per_trade_pct: 0.75        # % of current equity (capital + realized P&L) risked entry-to-stop per trade
+  max_open_positions: 6
+  max_position_pct: 20            # max % of equity in one stock
+  max_intraday_exposure_pct: 40   # max % of equity in MIS positions at once
+  max_swing_exposure_pct: 70      # max % of equity in CNC positions at once
+  daily_loss_limit_pct: 2.0       # realized loss today >= this: no new entries, intraday positions closed
+  weekly_loss_limit_pct: 5.0      # realized loss this week >= this: same, until Monday
+  max_trades_per_day: 12
+  min_price: 50
+  max_price: 20000
+
+costs:                            # used by paper broker and backtester
+  brokerage_pct: 0.03
+  slippage_pct: 0.05
+  statutory_pct: 0.06             # STT/exchange/GST approximation per side
+
+strategies:                       # defaults only: validated params from validation.json override these,
+                                  # and a strategy without a passing backtest never trades
+  intraday_orb:
+    enabled: true
+    opening_range_minutes: 15
+    volume_mult: 1.3              # breakout bar volume vs 20-bar average
+    atr_stop_mult: 1.2
+    target_r: 2.0
+  swing_trend:
+    enabled: true
+    breakout_lookback: 20
+    ema_fast: 50
+    ema_slow: 200
+    atr_stop_mult: 2.5
+    volume_mult: 1.2
+    max_hold_days: 40
+
+research:
+  llm_veto: false                 # true = Claude reads recent headlines and may veto a trade (needs ANTHROPIC_API_KEY).
+                                  # NOT backtested (no point-in-time news history) - it can only remove trades.
+  model: claude-sonnet-5-5
+
+universe:                         # liquid NSE large caps; edit freely
+  - RELIANCE
+  - TCS
+  - HDFCBANK
+  - ICICIBANK
+  - INFY
+  - SBIN
+  - BHARTIARTL
+  - ITC
+  - LT
+  - AXISBANK
+  - KOTAKBANK
+  - TATASTEEL
+  - TATAMOTORS
+  - MARUTI
+  - SUNPHARMA
+  - M&M
+  - BAJFINANCE
+  - HINDUNILVR
+  - NTPC
+  - POWERGRID
+  - ONGC
+  - COALINDIA
+  - JSWSTEEL
+  - ADANIPORTS
+  - HCLTECH
+  - WIPRO
+  - TECHM
+  - TITAN
+  - ULTRACEMCO
+  - BEL
