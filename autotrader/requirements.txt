@@ -1,0 +1,8 @@
+kiteconnect>=5.0
+pandas>=2.0
+numpy>=1.26
+pyyaml>=6.0
+fastapi>=0.110
+uvicorn>=0.29
+anthropic>=0.40
+pytest>=8.0
