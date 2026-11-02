@@ -61,6 +61,10 @@ class RiskManager:
             qty = floor(cash / sig.entry)
             if qty < 1:
                 return Decision(False, why="insufficient cash")
+        # don't take crumbs: if the caps shrank the trade far below its intended size, skip it
+        wanted = self.size(sig)
+        if qty < max(1, c.get("min_position_fraction", 0) * wanted):
+            return Decision(False, why=f"size {qty} < {c.get('min_position_fraction', 0):.0%} of intended {wanted}")
         return Decision(True, qty, "ok")
 
     def halted(self, day_pnl: float, week_pnl: float) -> bool:

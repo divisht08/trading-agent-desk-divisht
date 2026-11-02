@@ -1,20 +1,9 @@
-# Autotrader (NSE, Kite Connect)
-
-A separate, self-contained agent that lives alongside Agent Desk in this repo. It shares no code with
-`backend/`, `ml/` or `frontend/`, and the two are run and deployed separately.
-
-| | Agent Desk (repo root) | Autotrader (this folder) |
-|---|---|---|
-| Decides trades with | rule score + gradient-boosted model + Claude analyst/bull/bear/PM debate | two fixed rule strategies; Claude can only veto (optional, off by default) |
-| Horizons | daily-bar swing (with intraday square-off) | intraday 5-minute breakouts **and** multi-day/week trend trades |
-| Backtest role | model validated walk-forward; the debate is judged from Test mode | a strategy cannot trade at all unless it passes an out-of-sample gate |
-| Data | free Kite MCP, or paid Kite Connect | Kite Connect data plan (historical API needed) |
-| Dashboard | React app | minimal HTML page + JSON |
-
+# Trading Agent (NSE, Kite Connect)
 
 Autonomous long-only NSE equity agent: intraday (MIS) opening-range breakouts plus multi-day/multi-week (CNC) trend breakouts, with a hard risk layer. Runs on a server, no laptop needed. **Starts in paper mode, and a strategy trades only after passing a walk-forward backtest.**
 
 How each trade is set up, and every piece of information used: [docs/HOW_TRADES_ARE_MADE.md](docs/HOW_TRADES_ARE_MADE.md).
+Bad-year stress test results: [docs/STRESS_TEST_RESULTS.md](docs/STRESS_TEST_RESULTS.md).
 
 ## Architecture
 
@@ -37,9 +26,6 @@ docs/           how trades are made
 
 ## Run
 
-All commands below run from inside `autotrader/`.
-
-
 1. Zerodha: create a Kite Connect app at developers.kite.trade (paid monthly subscription; check the current price there). Set the redirect URL to `https://<your-server>/callback`.
 2. Copy `.env.example` to `.env` and fill in `KITE_API_KEY`, `KITE_API_SECRET`, `DASH_KEY`, `PUBLIC_URL`
    (optional: Telegram bot for the daily login link, `ANTHROPIC_API_KEY` for the LLM veto).
@@ -47,7 +33,7 @@ All commands below run from inside `autotrader/`.
 4. Run the backtest gate (section below) and copy the resulting `validation.json` into the `/data` volume.
    Without it the service runs but no strategy trades.
 5. Deploy anywhere that runs Docker (small VPS, Fly.io, Railway, Render), mounting a volume at `/data`:
-   `cd autotrader && docker build -t autotrader . && docker run -d --env-file .env -p 8000:8000 -v autotrader-data:/data autotrader`
+   `docker build -t agent . && docker run -d --env-file .env -p 8000:8000 -v agent-data:/data agent`
 6. **Daily:** from 08:00 IST each weekday the agent sends the login link once (Telegram, or open `/login` yourself). Approve on your phone; it trades until close.
    Zerodha requires this daily login; storing your password/TOTP to bypass it is against their terms and is not implemented.
 7. Dashboard: `https://<server>/?key=<DASH_KEY>`. Kill switch: `POST /pause?key=...` (entries stop; exits still run) and `/resume`.
@@ -105,9 +91,6 @@ Backtests can still overfit and markets change; a pass is permission to paper tr
 1. Set `mode: live` in `config.yaml`.
 2. Set env `LIVE_UNLOCK=I_ACCEPT_REAL_MONEY_RISK`.
 Without both, `KiteBroker` refuses to start. Start with a small capital. Live cash is capped at `min(account balance, capital)`.
-
-Before going live, also see the root README's "Going from Test to Automatic": API orders must come from a static IP
-registered with Kite, and check with Zerodha how SEBI's retail-algo framework applies to your setup.
 
 ## Known limits
 

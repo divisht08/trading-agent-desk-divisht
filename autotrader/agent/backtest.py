@@ -34,6 +34,11 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
     def window(sym, day):
         i = pos_of[sym][day]
         return idx[sym].iloc[max(0, i - W + 1): i + 1].reset_index()
+
+    rank = p.get("rank", "none")                 # none | momentum: order competing entries by score
+    regime = p.get("regime", "none")             # none | breadth: no new entries in weak markets
+    regime_thr = p.get("regime_threshold", 0.5)
+    breadth_by_day = market_breadth(idx) if regime == "breadth" else {}
     dates = sorted(set().union(*[set(d["date"]) for d in data.values()]))
     dates = [d for d in dates if (not start or d >= pd.Timestamp(start)) and (not end or d < pd.Timestamp(end))]
 
@@ -48,7 +53,10 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
                 o = float(idx[sym].loc[day, "open"])
                 cash += _sell(positions.pop(sym), o * (1 - slip), cost_rate, why, trades, day)
             pending_sell.pop(sym, None)
-        for sym, sig in list(pending_buy.items()):
+        order = list(pending_buy.items())
+        if rank == "momentum":
+            order.sort(key=lambda kv: kv[1].score, reverse=True)
+        for sym, sig in order:
             pending_buy.pop(sym)
             if sym in positions or day not in idx[sym].index:
                 continue
@@ -67,6 +75,7 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
                                   "risk": (fill - sig.stop) * d.qty}
 
         # 2) intraday stop checks + end-of-day decisions on completed bar
+        risk_on = regime != "breadth" or breadth_by_day.get(day, 0.0) >= regime_thr
         for sym, df in idx.items():
             if day not in df.index:
                 continue
@@ -84,6 +93,8 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
                 if out:
                     pending_sell[sym] = why
                 continue
+            if not risk_on:
+                continue
             hist = window(sym, day)
             sig = swing_trend(sym, hist, p)
             if sig:
@@ -92,6 +103,21 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
         equity.append((day, cash + sum(q["qty"] * q["last"] for q in positions.values())))
 
     return summarize(trades, capital, equity)
+
+
+def market_breadth(idx: dict[str, pd.DataFrame], ema_len: int = 200) -> dict:
+    """Share of symbols closing above their own EMA(ema_len), per day. EMA at day t uses data up
+    to t only (recursive EMA), so there is no look-ahead. Symbols with < ema_len bars are skipped."""
+    above, total = {}, {}
+    for df in idx.values():
+        c = df["close"]
+        e = c.ewm(span=ema_len, adjust=False).mean()
+        valid = pd.Series(range(len(c)), index=c.index) >= ema_len
+        for d, ok, a in zip(c.index, valid, c > e):
+            if ok:
+                total[d] = total.get(d, 0) + 1
+                above[d] = above.get(d, 0) + bool(a)
+    return {d: above[d] / total[d] for d in total}
 
 
 def _sell(pos, px, cost_rate, why, trades, day) -> float:

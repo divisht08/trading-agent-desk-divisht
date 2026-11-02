@@ -134,3 +134,30 @@ def test_orb_can_fire_on_first_bar_after_range():
                     "volume": float(v)} for t, o, h, l, c, v in today]
     df = pd.DataFrame(rows)
     assert intraday_orb("X", df, p, pd.Timestamp("2026-11-02 09:35")) is not None
+
+
+def test_min_position_fraction_rejects_crumbs():
+    r = RiskManager({**cfg()["risk"], "min_position_fraction": 0.25}, 100000)
+    held = {"Z": {"product": "MIS", "qty": 399, "entry": 100.0}}  # 39.9k of 40k MIS cap -> 1 share left
+    assert not r.approve(sig(product="MIS"), held, 100000, 0, 0, 0).ok
+    r0 = RiskManager({**cfg()["risk"], "min_position_fraction": 0}, 100000)
+    assert r0.approve(sig(product="MIS"), held, 100000, 0, 0, 0).qty == 1
+
+
+def test_momentum_score_and_breadth_use_past_only():
+    from agent.strategies import breadth, momentum_score
+    c = pd.Series(range(1, 301), dtype=float)
+    assert momentum_score(c, 126, 21) == c.iloc[-22] / c.iloc[-127] - 1
+    assert momentum_score(c.iloc[:100], 126, 21) is None
+    up, down = pd.Series(range(1, 301), dtype=float), pd.Series(range(300, 0, -1), dtype=float)
+    assert breadth({"a": up, "b": down}) == 0.5
+
+
+def test_momentum_backtest_runs_and_holds_cash_in_weak_regime():
+    from agent import backtest_momentum
+    days = pd.bdate_range("2019-01-01", periods=400)
+    falling = {s: pd.DataFrame({"date": days, "open": 100 - k * 0.05 - pd.Series(range(400)) * 0.1,
+                                "high": 101, "low": 1, "close": 100 - k * 0.05 - pd.Series(range(400)) * 0.1,
+                                "volume": 1e6}) for k, s in enumerate("ABC")}
+    res = backtest_momentum.run(falling, cfg(), {"regime": "breadth"}, "2020-01-01", None)
+    assert res["trades"] == 0 and res["return_pct"] == 0.0   # never buys a falling market

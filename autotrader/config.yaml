@@ -21,6 +21,7 @@ risk:
   max_trades_per_day: 12
   min_price: 50
   max_price: 20000
+  min_position_fraction: 0.25     # skip a trade if caps shrink it below 25% of its intended size
 
 costs:                            # used by paper broker and backtester
   brokerage_pct: 0.03

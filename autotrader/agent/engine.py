@@ -11,7 +11,7 @@ from .broker import Broker, PaperBroker
 from .config import Config
 from .risk import RiskManager
 from .store import Store
-from .strategies import Signal, intraday_orb, swing_exit, swing_trend
+from .strategies import Signal, breadth, intraday_orb, swing_exit, swing_trend
 
 
 def _t(s: str) -> datetime.time:
@@ -209,7 +209,13 @@ class Engine:
         if (st["swing_trend"]["enabled"] and now.time() >= _t("09:20")
                 and self.store.get("swing_scan_day") != today):
             self.store.set("swing_scan_day", today)
-            for sym in self.universe:
+            sw = st["swing_trend"]
+            if sw.get("regime") == "breadth":
+                b = breadth({s: self.daily(s, now)["close"] for s in self.universe if len(self.daily(s, now))})
+                if b is None or b < sw.get("regime_threshold", 0.5):
+                    self.store.log(f"swing scan skipped: weak market (breadth {b if b is None else round(b, 2)})")
+                    sw = None
+            for sym in (self.universe if sw else []):
                 if sym in positions:
                     continue
                 try:
@@ -223,6 +229,8 @@ class Engine:
                 if s:
                     signals.append(s)
 
+        if st["swing_trend"].get("rank") == "momentum":
+            signals.sort(key=lambda s: s.score, reverse=True)   # best candidates get the limited capital first
         for s in signals:
             positions = self.store.positions()
             d = self.risk.approve(s, positions, cash, day_pnl, week_pnl, trades_today)

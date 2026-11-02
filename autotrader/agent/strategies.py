@@ -17,6 +17,27 @@ class Signal:
     stop: float
     target: float | None
     reason: str
+    score: float = 0.0    # used to rank signals competing for limited capital (higher first)
+
+
+def momentum_score(close: pd.Series, lookback: int = 126, skip: int = 21) -> float | None:
+    """Classic '12-1'-style momentum on daily bars: return from `lookback` bars ago to `skip`
+    bars ago. Skipping the most recent month avoids the short-term reversal effect."""
+    if len(close) <= lookback:
+        return None
+    return float(close.iloc[-1 - skip] / close.iloc[-1 - lookback] - 1)
+
+
+def breadth(closes: dict[str, pd.Series], ema_len: int = 200) -> float | None:
+    """Market regime: share of the universe trading above its own EMA(ema_len) on the latest bar.
+    Uses each stock's data up to that bar only."""
+    above = total = 0
+    for c in closes.values():
+        if len(c) < ema_len:
+            continue
+        total += 1
+        above += float(c.iloc[-1]) > float(ema(c, ema_len).iloc[-1])
+    return above / total if total else None
 
 
 def intraday_orb(symbol: str, bars5: pd.DataFrame, p: dict, now_ts: pd.Timestamp) -> Signal | None:
@@ -71,7 +92,8 @@ def swing_trend(symbol: str, daily: pd.DataFrame, p: dict) -> Signal | None:
         entry = float(last["close"])
         stop = entry - p["atr_stop_mult"] * a
         return Signal(symbol, "swing_trend", "CNC", entry, stop, None,
-                      f"breakout >{hh:.2f}, EMA{p['ema_fast']}>EMA{p['ema_slow']}")
+                      f"breakout >{hh:.2f}, EMA{p['ema_fast']}>EMA{p['ema_slow']}",
+                      score=momentum_score(c) or 0.0)
     return None
 
 
