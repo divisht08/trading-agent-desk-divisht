@@ -1,0 +1,95 @@
+
+#### low_vol table
+| Variant | Full 2008-26 CAGR / Sharpe / MaxDD | OOS 2020-26 CAGR / Sharpe / MaxDD |
+|---|---|---|
+| Reported | 10.39 / 0.67 / -52.12 | 11.4 / 0.76 / -28.68 |
+| Reproduced | 10.39 / 0.67 / -52.12 | 11.4 / 0.76 / -28.68 |
+| +1 day delay | 10.3 / 0.66 / -52.01 | 11.47 / 0.77 / -28.67 |
+| +2 day delay | 10.61 / 0.68 / -52.02 | 11.6 / 0.78 / -28.97 |
+| 2x costs (0.28%/side) | 9.78 / 0.64 / -52.35 | 10.75 / 0.73 / -28.72 |
+| 3x costs (0.42%/side) | 9.18 / 0.6 / -52.57 | 10.1 / 0.69 / -28.75 |
+| +1 day delay and 2x costs | 9.69 / 0.63 / -52.25 | 10.82 / 0.73 / -28.7 |
+| Drift-aware sim (full) | 9.4 / 0.62 / -53.7 | 10.99 / 0.74 / -28.63 |
+| Cash earns 6%/yr | 10.39 / 0.67 / -52.12 | 11.4 / 0.76 / -28.68 |
+| Top-5 contributors zeroed | 7.41 / 0.56 / -49.85 | 9.49 / 0.74 / -26.19 |
+top5 full {'HINDUNILVR': 14.6, 'SUNPHARMA': 12.59, 'CIPLA': 11.3, 'TCS': 10.24, 'ITC': 10.19} share 0.263 names 128
+top5 oos {'SUNPHARMA': 6.58, 'DIVISLAB': 6.57, 'BHARTIARTL': 5.55, 'SBILIFE': 4.48, 'MARUTI': 4.27}
+exposure {'full_2008_2026': 1.0, 'out_of_sample_2020_2026': 1.0} turnover 1.97
+zeroed [('2020-03-03', 'TATACHEM', -0.556, 0.0555)]
+n 25-40 3 midmonth True 2.7755575615628914e-17
+
+#### momentum_plus table
+| Variant | Full 2008-26 CAGR / Sharpe / MaxDD | OOS 2020-26 CAGR / Sharpe / MaxDD |
+|---|---|---|
+| Reported | 8.39 / 0.44 / -72.49 | 11.51 / 0.54 / -40.7 |
+| Reproduced | 8.39 / 0.44 / -72.49 | 11.51 / 0.54 / -40.7 |
+| +1 day delay | 7.48 / 0.41 / -70.81 | 11.25 / 0.53 / -41.12 |
+| +2 day delay | 7.12 / 0.4 / -70.81 | 11.89 / 0.55 / -41.15 |
+| 2x costs (0.28%/side) | 7.02 / 0.39 / -72.7 | 10.01 / 0.49 / -40.77 |
+| 3x costs (0.42%/side) | 5.66 / 0.34 / -72.92 | 8.53 / 0.44 / -40.83 |
+| +1 day delay and 2x costs | 6.12 / 0.36 / -71.04 | 9.75 / 0.48 / -41.19 |
+| Drift-aware sim (full) | 7.37 / 0.4 / -73.35 | 11.53 / 0.54 / -40.78 |
+| Cash earns 6%/yr | 8.39 / 0.44 / -72.49 | 11.51 / 0.54 / -40.7 |
+| Top-5 contributors zeroed | 4.42 / 0.3 / -72.49 | 9.6 / 0.48 / -40.7 |
+top5 full {'MARUTI': 17.17, 'BAJAJ-AUTO': 15.88, 'ITC': 14.79, 'TVSMOTOR': 14.47, 'BHARATFORG': 13.51} share 0.31 names 269
+top5 oos {'PFC': 11.43, 'RECLTD': 10.9, 'ADANIENT': 9.15, 'LAURUSLABS': 8.32, 'TATAELXSI': 8.16}
+exposure {'full_2008_2026': 1.0, 'out_of_sample_2020_2026': 1.0} turnover 4.56
+zeroed []
+n 25-40 13 midmonth True 0.0
+
+#### breakout_v2 table
+| Variant | Full 2008-26 CAGR / Sharpe / MaxDD | OOS 2020-26 CAGR / Sharpe / MaxDD |
+|---|---|---|
+| Reported | 4.85 / 0.5 / -26.49 | 6.02 / 0.55 / -19.92 |
+| Reproduced | 4.85 / 0.5 / -26.49 | 6.02 / 0.55 / -19.92 |
+| +1 day delay | 5.1 / 0.52 / -25.47 | 5.92 / 0.53 / -20.26 |
+| +2 day delay | 5.07 / 0.52 / -27.33 | 6.01 / 0.54 / -19.31 |
+| 2x costs (0.28%/side) | 4.52 / 0.47 / -27.2 | 5.61 / 0.52 / -20.45 |
+| 3x costs (0.42%/side) | 4.19 / 0.44 / -27.9 | 5.19 / 0.48 / -20.98 |
+| +1 day delay and 2x costs | 4.77 / 0.49 / -26.17 | 5.5 / 0.5 / -20.79 |
+| Drift-aware sim (per_name) | 5.07 / 0.46 / -29.7 | 6.82 / 0.54 / -22.39 |
+| Cash earns 6%/yr | 7.79 / 0.76 / -22.29 | 8.42 / 0.74 / -16.97 |
+| Top-5 contributors zeroed | 3.08 / 0.36 / -25.03 | 3.54 / 0.37 / -21.21 |
+top5 full {'TVSMOTOR': 8.53, 'ADANIENT': 7.56, 'AUROPHARMA': 6.44, 'RECLTD': 5.71, 'BAJAJ-AUTO': 5.29} share 0.317 names 232
+top5 oos {'RECLTD': 5.95, 'ADANIENT': 4.41, 'BAJAJ-AUTO': 4.22, 'BHARTIARTL': 3.96, 'DIXON': 3.62}
+exposure {'full_2008_2026': 0.53, 'out_of_sample_2020_2026': 0.622} turnover 1.13
+zeroed [('2009-07-23', 'BHARTIARTL', -0.518, 0.0201), ('2015-06-03', 'ADANIENT', -0.805, 0.0261), ('2026-04-29', 'VEDL', -0.611, 0.0413)]
+n 25-40 8 midmonth True 0.0
+
+#### trend_timing table
+| Variant | Full 2008-26 CAGR / Sharpe / MaxDD | OOS 2020-26 CAGR / Sharpe / MaxDD |
+|---|---|---|
+| Reported | 2.27 / 0.22 / -45.72 | 10.07 / 0.67 / -19.08 |
+| Reproduced | 2.27 / 0.22 / -45.72 | 10.07 / 0.67 / -19.08 |
+| +1 day delay | 1.63 / 0.18 / -46.99 | 9.6 / 0.64 / -19.12 |
+| +2 day delay | 1.67 / 0.18 / -47.9 | 10.43 / 0.69 / -18.34 |
+| 2x costs (0.28%/side) | 1.83 / 0.19 / -46.67 | 9.62 / 0.65 / -19.67 |
+| 3x costs (0.42%/side) | 1.39 / 0.17 / -49.07 | 9.18 / 0.62 / -20.25 |
+| +1 day delay and 2x costs | 1.19 / 0.16 / -49.46 | 9.16 / 0.62 / -19.37 |
+| Drift-aware sim (full) | 1.58 / 0.18 / -46.1 | 9.92 / 0.66 / -19.35 |
+| Cash earns 6%/yr | 4.0 / 0.31 / -42.48 | 11.72 / 0.76 / -17.5 |
+| Top-5 contributors zeroed | 1.05 / 0.15 / -44.8 | 8.63 / 0.63 / -18.53 |
+top5 full {'HINDALCO': 6.78, 'TCS': 5.29, 'AXISBANK': 5.25, 'ICICIBANK': 5.09, 'M&M': 5.05} share 0.327 names 246
+top5 oos {'TATAPOWER': 3.94, 'M&M': 3.2, 'VEDL': 3.1, 'SBIN': 2.94, 'HINDALCO': 2.94}
+exposure {'full_2008_2026': 0.716, 'out_of_sample_2020_2026': 0.748} turnover 1.55
+zeroed [('2009-05-15', 'ABAN', 0.42, 0.02), ('2009-07-23', 'BHARTIARTL', -0.518, 0.02), ('2015-06-03', 'ADANIENT', -0.805, 0.02), ('2019-06-20', 'RELINFRA', 0.412, 0.02), ('2025-10-13', 'TMPV', -0.411, 0.02)]
+n 25-40 39 midmonth True 0.0
+
+#### mean_reversion table
+| Variant | Full 2008-26 CAGR / Sharpe / MaxDD | OOS 2020-26 CAGR / Sharpe / MaxDD |
+|---|---|---|
+| Reported | 1.55 / 0.18 / -56.74 | -5.58 / -0.15 / -52.54 |
+| Reproduced | 1.55 / 0.18 / -56.74 | -5.58 / -0.15 / -52.54 |
+| +1 day delay | -0.87 / 0.07 / -66.44 | -11.17 / -0.46 / -61.26 |
+| +2 day delay | -5.72 / -0.18 / -70.66 | -11.54 / -0.51 / -57.84 |
+| 2x costs (0.28%/side) | -7.73 / -0.25 / -79.41 | -14.81 / -0.62 / -69.64 |
+| 3x costs (0.42%/side) | -16.17 / -0.68 / -96.46 | -23.14 / -1.09 / -84.0 |
+| +1 day delay and 2x costs | -9.93 / -0.37 / -87.46 | -19.86 / -0.94 / -79.42 |
+| Drift-aware sim (per_name) | 0.72 / 0.14 / -57.23 | -5.86 / -0.17 / -52.69 |
+| Cash earns 6%/yr | 4.28 / 0.3 / -50.73 | -3.36 / -0.05 / -48.73 |
+| Top-5 contributors zeroed | -1.23 / 0.06 / -61.58 | -7.69 / -0.26 / -56.15 |
+top5 full {'GLENMARK': 11.11, 'TECHM': 10.67, 'GMDCLTD': 10.65, 'ICICIBANK': 10.52, 'TVSMOTOR': 10.52} share 0.208 names 333
+top5 oos {'GMDCLTD': 8.79, 'CHOLAFIN': 6.69, 'INDHOTEL': 6.25, 'KPITTECH': 5.98, 'M&M': 5.5}
+exposure {'full_2008_2026': 0.549, 'out_of_sample_2020_2026': 0.607} turnover 34.2
+zeroed [('2015-06-03', 'ADANIENT', -0.805, 0.2)]
+n 25-40 7 midmonth True 0.0

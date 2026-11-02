@@ -1,5 +1,10 @@
 # Stress test: bad market years (run 2 Nov 2026)
 
+> **Superseded — read [../research/RESULTS.md](../research/RESULTS.md).** Two corrections found later the same day:
+> (1) the Nifty file used here ended on 13 Apr 2026, so full-cycle Nifty is +268% / 7.18%/yr, not +288% / 7.5%;
+> (2) the momentum result below was almost entirely survivorship bias: on a point-in-time top-100 liquid universe the
+> same top-5 momentum rotation made only 3.4–3.9%/yr. The swing strategy's failure stands.
+
 Daily-bar backtests of each strategy variant through India's bad periods, against Nifty 50 buy-and-hold.
 Reproduce with `python -m agent.stress_test <daily_dir> <nifty_csv>`.
 

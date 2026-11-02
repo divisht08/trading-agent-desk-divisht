@@ -1,0 +1,281 @@
+{
+ "strategy": "low_vol",
+ "params": {
+  "top_n": 20,
+  "vol_lookback": 126,
+  "high52_min": 0.0,
+  "weighting": "inv_vol"
+ },
+ "t_weights_s": 1.7,
+ "reproduced": {
+  "full_2008_2026": {
+   "cagr_pct": 10.39,
+   "sharpe": 0.67,
+   "max_drawdown_pct": -52.12,
+   "annual_turnover_x": 1.97,
+   "avg_exposure_pct": 100.0
+  },
+  "in_sample_2008_2019": {
+   "cagr_pct": 9.82,
+   "sharpe": 0.62,
+   "max_drawdown_pct": -52.12,
+   "annual_turnover_x": 1.89,
+   "avg_exposure_pct": 100.0
+  },
+  "out_of_sample_2020_2026": {
+   "cagr_pct": 11.4,
+   "sharpe": 0.76,
+   "max_drawdown_pct": -28.68,
+   "annual_turnover_x": 2.1,
+   "avg_exposure_pct": 100.0
+  }
+ },
+ "reported": {
+  "full_2008_2026": {
+   "cagr_pct": 10.39,
+   "sharpe": 0.67,
+   "max_drawdown_pct": -52.12,
+   "annual_turnover_x": 1.97,
+   "avg_exposure_pct": 100.0
+  },
+  "in_sample_2008_2019": {
+   "cagr_pct": 9.82,
+   "sharpe": 0.62,
+   "max_drawdown_pct": -52.12,
+   "annual_turnover_x": 1.89,
+   "avg_exposure_pct": 100.0
+  },
+  "out_of_sample_2020_2026": {
+   "cagr_pct": 11.4,
+   "sharpe": 0.76,
+   "max_drawdown_pct": -28.68,
+   "annual_turnover_x": 2.1,
+   "avg_exposure_pct": 100.0
+  }
+ },
+ "repro_max_abs_metric_diff": 0.0,
+ "daily_csv_max_abs_ret_diff": 9.985502008591496e-17,
+ "stress": {
+  "base": {
+   "full_2008_2026": {
+    "cagr_pct": 10.39,
+    "sharpe": 0.67,
+    "max_drawdown_pct": -52.12,
+    "annual_turnover_x": 1.97,
+    "avg_exposure_pct": 100.0
+   },
+   "out_of_sample_2020_2026": {
+    "cagr_pct": 11.4,
+    "sharpe": 0.76,
+    "max_drawdown_pct": -28.68,
+    "annual_turnover_x": 2.1,
+    "avg_exposure_pct": 100.0
+   }
+  },
+  "delay_1d": {
+   "full_2008_2026": {
+    "cagr_pct": 10.3,
+    "sharpe": 0.66,
+    "max_drawdown_pct": -52.01,
+    "annual_turnover_x": 1.97,
+    "avg_exposure_pct": 100.0
+   },
+   "out_of_sample_2020_2026": {
+    "cagr_pct": 11.47,
+    "sharpe": 0.77,
+    "max_drawdown_pct": -28.67,
+    "annual_turnover_x": 2.1,
+    "avg_exposure_pct": 100.0
+   }
+  },
+  "delay_2d": {
+   "full_2008_2026": {
+    "cagr_pct": 10.61,
+    "sharpe": 0.68,
+    "max_drawdown_pct": -52.02,
+    "annual_turnover_x": 1.97,
+    "avg_exposure_pct": 100.0
+   },
+   "out_of_sample_2020_2026": {
+    "cagr_pct": 11.6,
+    "sharpe": 0.78,
+    "max_drawdown_pct": -28.97,
+    "annual_turnover_x": 2.1,
+    "avg_exposure_pct": 100.0
+   }
+  },
+  "cost_2x": {
+   "full_2008_2026": {
+    "cagr_pct": 9.78,
+    "sharpe": 0.64,
+    "max_drawdown_pct": -52.35,
+    "annual_turnover_x": 1.97,
+    "avg_exposure_pct": 100.0
+   },
+   "out_of_sample_2020_2026": {
+    "cagr_pct": 10.75,
+    "sharpe": 0.73,
+    "max_drawdown_pct": -28.72,
+    "annual_turnover_x": 2.1,
+    "avg_exposure_pct": 100.0
+   }
+  },
+  "cost_3x": {
+   "full_2008_2026": {
+    "cagr_pct": 9.18,
+    "sharpe": 0.6,
+    "max_drawdown_pct": -52.57,
+    "annual_turnover_x": 1.97,
+    "avg_exposure_pct": 100.0
+   },
+   "out_of_sample_2020_2026": {
+    "cagr_pct": 10.1,
+    "sharpe": 0.69,
+    "max_drawdown_pct": -28.75,
+    "annual_turnover_x": 2.1,
+    "avg_exposure_pct": 100.0
+   }
+  },
+  "delay_1d_cost_2x": {
+   "full_2008_2026": {
+    "cagr_pct": 9.69,
+    "sharpe": 0.63,
+    "max_drawdown_pct": -52.25,
+    "annual_turnover_x": 1.97,
+    "avg_exposure_pct": 100.0
+   },
+   "out_of_sample_2020_2026": {
+    "cagr_pct": 10.82,
+    "sharpe": 0.73,
+    "max_drawdown_pct": -28.7,
+    "annual_turnover_x": 2.1,
+    "avg_exposure_pct": 100.0
+   }
+  }
+ },
+ "cash_yield_6pct": {
+  "full_2008_2026": {
+   "cagr_pct": 10.39,
+   "sharpe": 0.67,
+   "max_drawdown_pct": -52.12
+  },
+  "in_sample_2008_2019": {
+   "cagr_pct": 9.82,
+   "sharpe": 0.62,
+   "max_drawdown_pct": -52.12
+  },
+  "out_of_sample_2020_2026": {
+   "cagr_pct": 11.4,
+   "sharpe": 0.76,
+   "max_drawdown_pct": -28.68
+  }
+ },
+ "avg_exposure": {
+  "full_2008_2026": 1.0,
+  "out_of_sample_2020_2026": 1.0
+ },
+ "drift_aware": {
+  "mode": "full",
+  "full_2008_2026": {
+   "cagr_pct": 9.4,
+   "sharpe": 0.62,
+   "max_drawdown_pct": -53.7,
+   "annual_turnover_x": 2.08,
+   "avg_exposure_pct": 100.0
+  },
+  "out_of_sample_2020_2026": {
+   "cagr_pct": 10.99,
+   "sharpe": 0.74,
+   "max_drawdown_pct": -28.63,
+   "annual_turnover_x": 2.21,
+   "avg_exposure_pct": 100.0
+  }
+ },
+ "top5_contributors_full": {
+  "HINDUNILVR": 14.6,
+  "SUNPHARMA": 12.59,
+  "CIPLA": 11.3,
+  "TCS": 10.24,
+  "ITC": 10.19
+ },
+ "sum_arith_contrib_pct": 224.23,
+ "top5_share_of_arith_sum": 0.263,
+ "n_names_held_full": 128,
+ "ex_top5": {
+  "full_2008_2026": {
+   "cagr_pct": 7.41,
+   "sharpe": 0.56,
+   "max_drawdown_pct": -49.85
+  },
+  "out_of_sample_2020_2026": {
+   "cagr_pct": 9.49,
+   "sharpe": 0.74,
+   "max_drawdown_pct": -26.19
+  }
+ },
+ "top5_contributors_oos": {
+  "SUNPHARMA": 6.58,
+  "DIVISLAB": 6.57,
+  "BHARTIARTL": 5.55,
+  "SBILIFE": 4.48,
+  "MARUTI": 4.27
+ },
+ "zeroed_moves_held": [
+  {
+   "date": "2020-03-03",
+   "sym": "TATACHEM",
+   "raw_r": -0.556,
+   "w": 0.0555
+  }
+ ],
+ "moves_25_40_held": [
+  {
+   "date": "2008-10-24",
+   "sym": "ABB",
+   "raw_r": -0.304,
+   "w": 0.0456
+  },
+  {
+   "date": "2008-10-27",
+   "sym": "ABB",
+   "raw_r": 0.295,
+   "w": 0.0456
+  },
+  {
+   "date": "2008-12-02",
+   "sym": "DRREDDY",
+   "raw_r": 0.263,
+   "w": 0.0521
+  }
+ ],
+ "midmonth_lookahead": {
+  "passed": true,
+  "cuts": {
+   "2009-11-18": {
+    "max_diff_before_cut": 2.0816681711721685e-17,
+    "diff_on_cut_day": 0.047992
+   },
+   "2013-02-13": {
+    "max_diff_before_cut": 1.3877787807814457e-17,
+    "diff_on_cut_day": 0.048921
+   },
+   "2017-08-09": {
+    "max_diff_before_cut": 1.3877787807814457e-17,
+    "diff_on_cut_day": 0.045415
+   },
+   "2021-05-19": {
+    "max_diff_before_cut": 1.3877787807814457e-17,
+    "diff_on_cut_day": 0.047064
+   },
+   "2025-12-10": {
+    "max_diff_before_cut": 2.7755575615628914e-17,
+    "diff_on_cut_day": 0.044541
+   }
+  }
+ },
+ "row_sum": {
+  "max": 1.0,
+  "min_w": 0.0
+ },
+ "elapsed_s": 12.7
+}

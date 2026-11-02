@@ -3,7 +3,8 @@
 Autonomous long-only NSE equity agent: intraday (MIS) opening-range breakouts plus multi-day/multi-week (CNC) trend breakouts, with a hard risk layer. Runs on a server, no laptop needed. **Starts in paper mode, and a strategy trades only after passing a walk-forward backtest.**
 
 How each trade is set up, and every piece of information used: [docs/HOW_TRADES_ARE_MADE.md](docs/HOW_TRADES_ARE_MADE.md).
-Bad-year stress test results: [docs/STRESS_TEST_RESULTS.md](docs/STRESS_TEST_RESULTS.md).
+Parallel strategy research (6 strategies, independent audit): [research/RESULTS.md](research/RESULTS.md).
+Bad-year stress test (superseded, kept for history): [docs/STRESS_TEST_RESULTS.md](docs/STRESS_TEST_RESULTS.md).
 
 ## Architecture
 

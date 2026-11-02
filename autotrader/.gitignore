@@ -3,3 +3,8 @@
 data/
 __pycache__/
 .pytest_cache/
+research/data/
+research/intraday/raw*/
+research/intraday/bars5/
+research/**/daily_returns.csv
+research/**/__pycache__/

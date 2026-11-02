@@ -1,0 +1,1179 @@
+{
+ "symbols": [
+  "ASIANPAINT",
+  "AXISBANK",
+  "BAJFINANCE",
+  "BHARTIARTL",
+  "HDFC",
+  "HDFCBANK",
+  "ICICIBANK",
+  "INFY",
+  "ITC",
+  "KOTAKBANK",
+  "LT",
+  "MARUTI",
+  "RELIANCE",
+  "SBIN",
+  "SUNPHARMA"
+ ],
+ "grid": [
+  {
+   "opening_range_minutes": 15,
+   "target_r": 1.5,
+   "volume_mult": 1.2
+  },
+  {
+   "opening_range_minutes": 15,
+   "target_r": 1.5,
+   "volume_mult": 1.6
+  },
+  {
+   "opening_range_minutes": 15,
+   "target_r": 2.5,
+   "volume_mult": 1.2
+  },
+  {
+   "opening_range_minutes": 15,
+   "target_r": 2.5,
+   "volume_mult": 1.6
+  },
+  {
+   "opening_range_minutes": 30,
+   "target_r": 1.5,
+   "volume_mult": 1.2
+  },
+  {
+   "opening_range_minutes": 30,
+   "target_r": 1.5,
+   "volume_mult": 1.6
+  },
+  {
+   "opening_range_minutes": 30,
+   "target_r": 2.5,
+   "volume_mult": 1.2
+  },
+  {
+   "opening_range_minutes": 30,
+   "target_r": 2.5,
+   "volume_mult": 1.6
+  }
+ ],
+ "in_sample": [
+  "2017-01-01",
+  "2019-01-01"
+ ],
+ "out_of_sample": [
+  "2019-01-01",
+  "2021-01-01"
+ ],
+ "costs_config": {
+  "brokerage_pct": 0.03,
+  "slippage_pct": 0.05,
+  "statutory_pct": 0.06
+ },
+ "risk_config": {
+  "risk_per_trade_pct": 0.75,
+  "max_open_positions": 6,
+  "max_position_pct": 20,
+  "max_intraday_exposure_pct": 40,
+  "max_swing_exposure_pct": 70,
+  "daily_loss_limit_pct": 2.0,
+  "weekly_loss_limit_pct": 5.0,
+  "max_trades_per_day": 12,
+  "min_price": 50,
+  "max_price": 20000,
+  "min_position_fraction": 0.25
+ },
+ "market_config": {
+  "open": "09:15",
+  "close": "15:30",
+  "intraday_entry_start": "09:30",
+  "intraday_entry_end": "14:45",
+  "intraday_squareoff": "15:12",
+  "tick_seconds": 60
+ },
+ "base_params": {
+  "enabled": true,
+  "opening_range_minutes": 15,
+  "volume_mult": 1.3,
+  "atr_stop_mult": 1.2,
+  "target_r": 2.0
+ },
+ "grid_results": [
+  {
+   "params": {
+    "opening_range_minutes": 15,
+    "target_r": 1.5,
+    "volume_mult": 1.2
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -69.22,
+    "cagr_pct": -45.38,
+    "sharpe": -17.17,
+    "max_dd_pct": -69.31,
+    "trades": 2299,
+    "avg_cost_in_r": 0.89,
+    "avg_r_before_costs": 0.009,
+    "median_stop_dist_pct": 0.325,
+    "avg_position_pct_of_capital": 10.8,
+    "win_rate": 0.33,
+    "avg_r": -0.881,
+    "profit_factor": 0.26,
+    "net_pnl": -69217.0,
+    "gross_pnl_before_costs": 77.0,
+    "charges": 44546.0,
+    "slippage_est": 24748.0,
+    "costs_share_of_gross_abs_pct": 90061.3,
+    "costs_pct_of_capital": 69.29,
+    "exit_reasons": {
+     "stop": 1484,
+     "target": 750,
+     "squareoff": 65
+    },
+    "trades_per_day": 4.68
+   },
+   "is_run_summary": {
+    "trades": 2299,
+    "win_rate": 0.33,
+    "avg_r": -0.881,
+    "profit_factor": 0.26,
+    "net_pnl": -69217.0,
+    "return_pct": -69.22,
+    "max_drawdown_pct": -69.31,
+    "sharpe": -16.05,
+    "days": 486
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -70.66,
+    "cagr_pct": -46.43,
+    "sharpe": -13.03,
+    "max_dd_pct": -70.66,
+    "trades": 2584,
+    "avg_cost_in_r": 0.745,
+    "avg_r_before_costs": 0.023,
+    "median_stop_dist_pct": 0.394,
+    "avg_position_pct_of_capital": 10.3,
+    "win_rate": 0.352,
+    "avg_r": -0.722,
+    "profit_factor": 0.36,
+    "net_pnl": -70660.0,
+    "gross_pnl_before_costs": 3619.0,
+    "charges": 47751.0,
+    "slippage_est": 26528.0,
+    "costs_share_of_gross_abs_pct": 2052.7,
+    "costs_pct_of_capital": 74.28,
+    "exit_reasons": {
+     "stop": 1631,
+     "target": 888,
+     "squareoff": 65
+    },
+    "trades_per_day": 5.22
+   },
+   "oos_run_summary": {
+    "trades": 2584,
+    "win_rate": 0.352,
+    "avg_r": -0.722,
+    "profit_factor": 0.36,
+    "net_pnl": -70660.0,
+    "return_pct": -70.66,
+    "max_drawdown_pct": -70.66,
+    "sharpe": -13.64,
+    "days": 489
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 15,
+    "target_r": 1.5,
+    "volume_mult": 1.6
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -59.66,
+    "cagr_pct": -37.25,
+    "sharpe": -15.61,
+    "max_dd_pct": -59.66,
+    "trades": 1811,
+    "avg_cost_in_r": 0.911,
+    "avg_r_before_costs": 0.026,
+    "median_stop_dist_pct": 0.319,
+    "avg_position_pct_of_capital": 12.2,
+    "win_rate": 0.333,
+    "avg_r": -0.885,
+    "profit_factor": 0.27,
+    "net_pnl": -59664.0,
+    "gross_pnl_before_costs": 1948.0,
+    "charges": 39608.0,
+    "slippage_est": 22005.0,
+    "costs_share_of_gross_abs_pct": 3162.3,
+    "costs_pct_of_capital": 61.61,
+    "exit_reasons": {
+     "stop": 1158,
+     "target": 596,
+     "squareoff": 57
+    },
+    "trades_per_day": 3.69
+   },
+   "is_run_summary": {
+    "trades": 1811,
+    "win_rate": 0.333,
+    "avg_r": -0.885,
+    "profit_factor": 0.27,
+    "net_pnl": -59664.0,
+    "return_pct": -59.66,
+    "max_drawdown_pct": -59.66,
+    "sharpe": -15.25,
+    "days": 480
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -63.08,
+    "cagr_pct": -39.78,
+    "sharpe": -13.28,
+    "max_dd_pct": -63.08,
+    "trades": 2016,
+    "avg_cost_in_r": 0.755,
+    "avg_r_before_costs": 0.013,
+    "median_stop_dist_pct": 0.386,
+    "avg_position_pct_of_capital": 11.4,
+    "win_rate": 0.347,
+    "avg_r": -0.742,
+    "profit_factor": 0.34,
+    "net_pnl": -63079.0,
+    "gross_pnl_before_costs": 1178.0,
+    "charges": 41308.0,
+    "slippage_est": 22949.0,
+    "costs_share_of_gross_abs_pct": 5453.0,
+    "costs_pct_of_capital": 64.26,
+    "exit_reasons": {
+     "stop": 1278,
+     "target": 680,
+     "squareoff": 58
+    },
+    "trades_per_day": 4.07
+   },
+   "oos_run_summary": {
+    "trades": 2016,
+    "win_rate": 0.347,
+    "avg_r": -0.742,
+    "profit_factor": 0.34,
+    "net_pnl": -63079.0,
+    "return_pct": -63.08,
+    "max_drawdown_pct": -63.08,
+    "sharpe": -13.9,
+    "days": 481
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 15,
+    "target_r": 2.5,
+    "volume_mult": 1.2
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -66.29,
+    "cagr_pct": -42.77,
+    "sharpe": -13.38,
+    "max_dd_pct": -66.46,
+    "trades": 2154,
+    "avg_cost_in_r": 0.883,
+    "avg_r_before_costs": 0.032,
+    "median_stop_dist_pct": 0.328,
+    "avg_position_pct_of_capital": 11.3,
+    "win_rate": 0.245,
+    "avg_r": -0.851,
+    "profit_factor": 0.35,
+    "net_pnl": -66294.0,
+    "gross_pnl_before_costs": 1757.0,
+    "charges": 43747.0,
+    "slippage_est": 24304.0,
+    "costs_share_of_gross_abs_pct": 3873.2,
+    "costs_pct_of_capital": 68.05,
+    "exit_reasons": {
+     "stop": 1523,
+     "target": 455,
+     "squareoff": 176
+    },
+    "trades_per_day": 4.39
+   },
+   "is_run_summary": {
+    "trades": 2154,
+    "win_rate": 0.245,
+    "avg_r": -0.851,
+    "profit_factor": 0.35,
+    "net_pnl": -66294.0,
+    "return_pct": -66.29,
+    "max_drawdown_pct": -66.46,
+    "sharpe": -13.01,
+    "days": 486
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -66.14,
+    "cagr_pct": -42.38,
+    "sharpe": -8.98,
+    "max_dd_pct": -66.15,
+    "trades": 2393,
+    "avg_cost_in_r": 0.746,
+    "avg_r_before_costs": 0.027,
+    "median_stop_dist_pct": 0.391,
+    "avg_position_pct_of_capital": 10.9,
+    "win_rate": 0.261,
+    "avg_r": -0.718,
+    "profit_factor": 0.46,
+    "net_pnl": -66143.0,
+    "gross_pnl_before_costs": 6672.0,
+    "charges": 46810.0,
+    "slippage_est": 26006.0,
+    "costs_share_of_gross_abs_pct": 1091.3,
+    "costs_pct_of_capital": 72.82,
+    "exit_reasons": {
+     "stop": 1699,
+     "target": 530,
+     "squareoff": 164
+    },
+    "trades_per_day": 4.83
+   },
+   "oos_run_summary": {
+    "trades": 2393,
+    "win_rate": 0.261,
+    "avg_r": -0.718,
+    "profit_factor": 0.46,
+    "net_pnl": -66143.0,
+    "return_pct": -66.14,
+    "max_drawdown_pct": -66.15,
+    "sharpe": -9.87,
+    "days": 489
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 15,
+    "target_r": 2.5,
+    "volume_mult": 1.6
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -58.09,
+    "cagr_pct": -36.0,
+    "sharpe": -12.38,
+    "max_dd_pct": -58.21,
+    "trades": 1713,
+    "avg_cost_in_r": 0.903,
+    "avg_r_before_costs": 0.033,
+    "median_stop_dist_pct": 0.321,
+    "avg_position_pct_of_capital": 12.5,
+    "win_rate": 0.244,
+    "avg_r": -0.87,
+    "profit_factor": 0.35,
+    "net_pnl": -58091.0,
+    "gross_pnl_before_costs": 1690.0,
+    "charges": 38431.0,
+    "slippage_est": 21350.0,
+    "costs_share_of_gross_abs_pct": 3537.8,
+    "costs_pct_of_capital": 59.78,
+    "exit_reasons": {
+     "stop": 1214,
+     "target": 363,
+     "squareoff": 136
+    },
+    "trades_per_day": 3.49
+   },
+   "is_run_summary": {
+    "trades": 1713,
+    "win_rate": 0.244,
+    "avg_r": -0.87,
+    "profit_factor": 0.35,
+    "net_pnl": -58091.0,
+    "return_pct": -58.09,
+    "max_drawdown_pct": -58.21,
+    "sharpe": -12.4,
+    "days": 480
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -58.26,
+    "cagr_pct": -35.91,
+    "sharpe": -9.05,
+    "max_dd_pct": -58.27,
+    "trades": 1905,
+    "avg_cost_in_r": 0.752,
+    "avg_r_before_costs": 0.045,
+    "median_stop_dist_pct": 0.387,
+    "avg_position_pct_of_capital": 12.0,
+    "win_rate": 0.267,
+    "avg_r": -0.706,
+    "profit_factor": 0.45,
+    "net_pnl": -58261.0,
+    "gross_pnl_before_costs": 5619.0,
+    "charges": 41066.0,
+    "slippage_est": 22814.0,
+    "costs_share_of_gross_abs_pct": 1136.9,
+    "costs_pct_of_capital": 63.88,
+    "exit_reasons": {
+     "stop": 1333,
+     "target": 423,
+     "squareoff": 149
+    },
+    "trades_per_day": 3.85
+   },
+   "oos_run_summary": {
+    "trades": 1905,
+    "win_rate": 0.267,
+    "avg_r": -0.706,
+    "profit_factor": 0.45,
+    "net_pnl": -58261.0,
+    "return_pct": -58.26,
+    "max_drawdown_pct": -58.27,
+    "sharpe": -9.75,
+    "days": 481
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 30,
+    "target_r": 1.5,
+    "volume_mult": 1.2
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -66.68,
+    "cagr_pct": -43.11,
+    "sharpe": -18.18,
+    "max_dd_pct": -66.74,
+    "trades": 2150,
+    "avg_cost_in_r": 0.922,
+    "avg_r_before_costs": 0.021,
+    "median_stop_dist_pct": 0.314,
+    "avg_position_pct_of_capital": 11.3,
+    "win_rate": 0.329,
+    "avg_r": -0.901,
+    "profit_factor": 0.25,
+    "net_pnl": -66681.0,
+    "gross_pnl_before_costs": 1422.0,
+    "charges": 43780.0,
+    "slippage_est": 24322.0,
+    "costs_share_of_gross_abs_pct": 4789.6,
+    "costs_pct_of_capital": 68.1,
+    "exit_reasons": {
+     "stop": 1379,
+     "target": 707,
+     "squareoff": 64
+    },
+    "trades_per_day": 4.38
+   },
+   "is_run_summary": {
+    "trades": 2150,
+    "win_rate": 0.329,
+    "avg_r": -0.901,
+    "profit_factor": 0.25,
+    "net_pnl": -66681.0,
+    "return_pct": -66.68,
+    "max_drawdown_pct": -66.74,
+    "sharpe": -16.75,
+    "days": 482
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -68.48,
+    "cagr_pct": -44.44,
+    "sharpe": -13.64,
+    "max_dd_pct": -68.48,
+    "trades": 2358,
+    "avg_cost_in_r": 0.765,
+    "avg_r_before_costs": 0.012,
+    "median_stop_dist_pct": 0.384,
+    "avg_position_pct_of_capital": 10.7,
+    "win_rate": 0.344,
+    "avg_r": -0.753,
+    "profit_factor": 0.34,
+    "net_pnl": -68481.0,
+    "gross_pnl_before_costs": 2187.0,
+    "charges": 45430.0,
+    "slippage_est": 25239.0,
+    "costs_share_of_gross_abs_pct": 3231.4,
+    "costs_pct_of_capital": 70.67,
+    "exit_reasons": {
+     "stop": 1494,
+     "target": 785,
+     "squareoff": 79
+    },
+    "trades_per_day": 4.76
+   },
+   "oos_run_summary": {
+    "trades": 2358,
+    "win_rate": 0.344,
+    "avg_r": -0.753,
+    "profit_factor": 0.34,
+    "net_pnl": -68481.0,
+    "return_pct": -68.48,
+    "max_drawdown_pct": -68.48,
+    "sharpe": -14.19,
+    "days": 486
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 30,
+    "target_r": 1.5,
+    "volume_mult": 1.6
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -59.4,
+    "cagr_pct": -37.04,
+    "sharpe": -16.28,
+    "max_dd_pct": -59.47,
+    "trades": 1760,
+    "avg_cost_in_r": 0.939,
+    "avg_r_before_costs": 0.023,
+    "median_stop_dist_pct": 0.309,
+    "avg_position_pct_of_capital": 12.4,
+    "win_rate": 0.326,
+    "avg_r": -0.916,
+    "profit_factor": 0.25,
+    "net_pnl": -59397.0,
+    "gross_pnl_before_costs": 1790.0,
+    "charges": 39335.0,
+    "slippage_est": 21853.0,
+    "costs_share_of_gross_abs_pct": 3417.7,
+    "costs_pct_of_capital": 61.19,
+    "exit_reasons": {
+     "stop": 1129,
+     "target": 574,
+     "squareoff": 57
+    },
+    "trades_per_day": 3.58
+   },
+   "is_run_summary": {
+    "trades": 1760,
+    "win_rate": 0.326,
+    "avg_r": -0.916,
+    "profit_factor": 0.25,
+    "net_pnl": -59397.0,
+    "return_pct": -59.4,
+    "max_drawdown_pct": -59.47,
+    "sharpe": -16.12,
+    "days": 476
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -60.43,
+    "cagr_pct": -37.62,
+    "sharpe": -13.81,
+    "max_dd_pct": -60.43,
+    "trades": 1854,
+    "avg_cost_in_r": 0.785,
+    "avg_r_before_costs": 0.023,
+    "median_stop_dist_pct": 0.373,
+    "avg_position_pct_of_capital": 11.9,
+    "win_rate": 0.347,
+    "avg_r": -0.761,
+    "profit_factor": 0.33,
+    "net_pnl": -60428.0,
+    "gross_pnl_before_costs": 1467.0,
+    "charges": 39790.0,
+    "slippage_est": 22105.0,
+    "costs_share_of_gross_abs_pct": 4218.1,
+    "costs_pct_of_capital": 61.89,
+    "exit_reasons": {
+     "stop": 1164,
+     "target": 618,
+     "squareoff": 72
+    },
+    "trades_per_day": 3.75
+   },
+   "oos_run_summary": {
+    "trades": 1854,
+    "win_rate": 0.347,
+    "avg_r": -0.761,
+    "profit_factor": 0.33,
+    "net_pnl": -60428.0,
+    "return_pct": -60.43,
+    "max_drawdown_pct": -60.43,
+    "sharpe": -14.47,
+    "days": 474
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 30,
+    "target_r": 2.5,
+    "volume_mult": 1.2
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -63.86,
+    "cagr_pct": -40.68,
+    "sharpe": -14.41,
+    "max_dd_pct": -64.06,
+    "trades": 2013,
+    "avg_cost_in_r": 0.915,
+    "avg_r_before_costs": 0.049,
+    "median_stop_dist_pct": 0.319,
+    "avg_position_pct_of_capital": 11.8,
+    "win_rate": 0.246,
+    "avg_r": -0.866,
+    "profit_factor": 0.34,
+    "net_pnl": -63856.0,
+    "gross_pnl_before_costs": 2784.0,
+    "charges": 42840.0,
+    "slippage_est": 23800.0,
+    "costs_share_of_gross_abs_pct": 2393.6,
+    "costs_pct_of_capital": 66.64,
+    "exit_reasons": {
+     "stop": 1409,
+     "target": 426,
+     "squareoff": 178
+    },
+    "trades_per_day": 4.1
+   },
+   "is_run_summary": {
+    "trades": 2013,
+    "win_rate": 0.246,
+    "avg_r": -0.866,
+    "profit_factor": 0.34,
+    "net_pnl": -63856.0,
+    "return_pct": -63.86,
+    "max_drawdown_pct": -64.06,
+    "sharpe": -13.77,
+    "days": 482
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -61.83,
+    "cagr_pct": -38.75,
+    "sharpe": -8.47,
+    "max_dd_pct": -61.83,
+    "trades": 2192,
+    "avg_cost_in_r": 0.762,
+    "avg_r_before_costs": 0.068,
+    "median_stop_dist_pct": 0.385,
+    "avg_position_pct_of_capital": 11.5,
+    "win_rate": 0.273,
+    "avg_r": -0.694,
+    "profit_factor": 0.46,
+    "net_pnl": -61827.0,
+    "gross_pnl_before_costs": 8436.0,
+    "charges": 45169.0,
+    "slippage_est": 25094.0,
+    "costs_share_of_gross_abs_pct": 832.9,
+    "costs_pct_of_capital": 70.26,
+    "exit_reasons": {
+     "stop": 1513,
+     "target": 496,
+     "squareoff": 183
+    },
+    "trades_per_day": 4.43
+   },
+   "oos_run_summary": {
+    "trades": 2192,
+    "win_rate": 0.273,
+    "avg_r": -0.694,
+    "profit_factor": 0.46,
+    "net_pnl": -61827.0,
+    "return_pct": -61.83,
+    "max_drawdown_pct": -61.83,
+    "sharpe": -9.31,
+    "days": 487
+   }
+  },
+  {
+   "params": {
+    "opening_range_minutes": 30,
+    "target_r": 2.5,
+    "volume_mult": 1.6
+   },
+   "is": {
+    "days": 491,
+    "total_return_pct": -56.4,
+    "cagr_pct": -34.69,
+    "sharpe": -12.66,
+    "max_dd_pct": -56.64,
+    "trades": 1653,
+    "avg_cost_in_r": 0.928,
+    "avg_r_before_costs": 0.046,
+    "median_stop_dist_pct": 0.313,
+    "avg_position_pct_of_capital": 12.9,
+    "win_rate": 0.246,
+    "avg_r": -0.881,
+    "profit_factor": 0.35,
+    "net_pnl": -56396.0,
+    "gross_pnl_before_costs": 3355.0,
+    "charges": 38411.0,
+    "slippage_est": 21339.0,
+    "costs_share_of_gross_abs_pct": 1781.2,
+    "costs_pct_of_capital": 59.75,
+    "exit_reasons": {
+     "stop": 1161,
+     "target": 344,
+     "squareoff": 148
+    },
+    "trades_per_day": 3.37
+   },
+   "is_run_summary": {
+    "trades": 1653,
+    "win_rate": 0.246,
+    "avg_r": -0.881,
+    "profit_factor": 0.35,
+    "net_pnl": -56396.0,
+    "return_pct": -56.4,
+    "max_drawdown_pct": -56.64,
+    "sharpe": -12.58,
+    "days": 476
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -54.51,
+    "cagr_pct": -33.04,
+    "sharpe": -9.01,
+    "max_dd_pct": -54.51,
+    "trades": 1749,
+    "avg_cost_in_r": 0.783,
+    "avg_r_before_costs": 0.087,
+    "median_stop_dist_pct": 0.374,
+    "avg_position_pct_of_capital": 12.5,
+    "win_rate": 0.278,
+    "avg_r": -0.696,
+    "profit_factor": 0.44,
+    "net_pnl": -54512.0,
+    "gross_pnl_before_costs": 6752.0,
+    "charges": 39384.0,
+    "slippage_est": 21880.0,
+    "costs_share_of_gross_abs_pct": 907.3,
+    "costs_pct_of_capital": 61.26,
+    "exit_reasons": {
+     "stop": 1190,
+     "target": 393,
+     "squareoff": 166
+    },
+    "trades_per_day": 3.53
+   },
+   "oos_run_summary": {
+    "trades": 1749,
+    "win_rate": 0.278,
+    "avg_r": -0.696,
+    "profit_factor": 0.44,
+    "net_pnl": -54512.0,
+    "return_pct": -54.51,
+    "max_drawdown_pct": -54.51,
+    "sharpe": -9.89,
+    "days": 474
+   }
+  }
+ ],
+ "chosen_index": 3,
+ "chosen_params": {
+  "opening_range_minutes": 15,
+  "target_r": 2.5,
+  "volume_mult": 1.6
+ },
+ "chosen": {
+  "is": {
+   "days": 491,
+   "total_return_pct": -58.09,
+   "cagr_pct": -36.0,
+   "sharpe": -12.38,
+   "max_dd_pct": -58.21,
+   "trades": 1713,
+   "avg_cost_in_r": 0.903,
+   "avg_r_before_costs": 0.033,
+   "median_stop_dist_pct": 0.321,
+   "avg_position_pct_of_capital": 12.5,
+   "win_rate": 0.244,
+   "avg_r": -0.87,
+   "profit_factor": 0.35,
+   "net_pnl": -58091.0,
+   "gross_pnl_before_costs": 1690.0,
+   "charges": 38431.0,
+   "slippage_est": 21350.0,
+   "costs_share_of_gross_abs_pct": 3537.8,
+   "costs_pct_of_capital": 59.78,
+   "exit_reasons": {
+    "stop": 1214,
+    "target": 363,
+    "squareoff": 136
+   },
+   "trades_per_day": 3.49
+  },
+  "oos": {
+   "days": 495,
+   "total_return_pct": -58.26,
+   "cagr_pct": -35.91,
+   "sharpe": -9.05,
+   "max_dd_pct": -58.27,
+   "trades": 1905,
+   "avg_cost_in_r": 0.752,
+   "avg_r_before_costs": 0.045,
+   "median_stop_dist_pct": 0.387,
+   "avg_position_pct_of_capital": 12.0,
+   "win_rate": 0.267,
+   "avg_r": -0.706,
+   "profit_factor": 0.45,
+   "net_pnl": -58261.0,
+   "gross_pnl_before_costs": 5619.0,
+   "charges": 41066.0,
+   "slippage_est": 22814.0,
+   "costs_share_of_gross_abs_pct": 1136.9,
+   "costs_pct_of_capital": 63.88,
+   "exit_reasons": {
+    "stop": 1333,
+    "target": 423,
+    "squareoff": 149
+   },
+   "trades_per_day": 3.85
+  },
+  "2017": {
+   "days": 246,
+   "total_return_pct": -37.67,
+   "cagr_pct": -38.38,
+   "sharpe": -14.82,
+   "max_dd_pct": -37.85,
+   "trades": 845,
+   "avg_cost_in_r": 0.974,
+   "avg_r_before_costs": -0.02,
+   "median_stop_dist_pct": 0.301,
+   "avg_position_pct_of_capital": 15.2,
+   "win_rate": 0.222,
+   "avg_r": -0.995,
+   "profit_factor": 0.29,
+   "net_pnl": -37668.0,
+   "gross_pnl_before_costs": -1705.0,
+   "charges": 23119.0,
+   "slippage_est": 12844.0,
+   "costs_share_of_gross_abs_pct": 2108.8,
+   "costs_pct_of_capital": 35.96,
+   "exit_reasons": {
+    "stop": 614,
+    "target": 162,
+    "squareoff": 69
+   },
+   "trades_per_day": 3.43,
+   "equity_at_start": 100000.0
+  },
+  "2018": {
+   "days": 245,
+   "total_return_pct": -32.77,
+   "cagr_pct": -33.52,
+   "sharpe": -10.45,
+   "max_dd_pct": -32.77,
+   "trades": 868,
+   "avg_cost_in_r": 0.833,
+   "avg_r_before_costs": 0.084,
+   "median_stop_dist_pct": 0.349,
+   "avg_position_pct_of_capital": 15.7,
+   "win_rate": 0.265,
+   "avg_r": -0.749,
+   "profit_factor": 0.44,
+   "net_pnl": -20424.0,
+   "gross_pnl_before_costs": 3395.0,
+   "charges": 15312.0,
+   "slippage_est": 8507.0,
+   "costs_share_of_gross_abs_pct": 701.5,
+   "costs_pct_of_capital": 38.21,
+   "exit_reasons": {
+    "stop": 600,
+    "target": 201,
+    "squareoff": 67
+   },
+   "trades_per_day": 3.54,
+   "equity_at_start": 62332.0
+  },
+  "2019": {
+   "days": 244,
+   "total_return_pct": -36.33,
+   "cagr_pct": -37.27,
+   "sharpe": -12.77,
+   "max_dd_pct": -36.35,
+   "trades": 893,
+   "avg_cost_in_r": 0.851,
+   "avg_r_before_costs": 0.003,
+   "median_stop_dist_pct": 0.334,
+   "avg_position_pct_of_capital": 15.2,
+   "win_rate": 0.244,
+   "avg_r": -0.848,
+   "profit_factor": 0.38,
+   "net_pnl": -36330.0,
+   "gross_pnl_before_costs": 1544.0,
+   "charges": 24348.0,
+   "slippage_est": 13526.0,
+   "costs_share_of_gross_abs_pct": 2453.1,
+   "costs_pct_of_capital": 37.87,
+   "exit_reasons": {
+    "stop": 643,
+    "target": 187,
+    "squareoff": 63
+   },
+   "trades_per_day": 3.66,
+   "equity_at_start": 100000.0
+  },
+  "2020": {
+   "days": 251,
+   "total_return_pct": -34.44,
+   "cagr_pct": -34.55,
+   "sharpe": -7.18,
+   "max_dd_pct": -34.44,
+   "trades": 1012,
+   "avg_cost_in_r": 0.664,
+   "avg_r_before_costs": 0.083,
+   "median_stop_dist_pct": 0.441,
+   "avg_position_pct_of_capital": 14.4,
+   "win_rate": 0.288,
+   "avg_r": -0.581,
+   "profit_factor": 0.54,
+   "net_pnl": -21931.0,
+   "gross_pnl_before_costs": 4075.0,
+   "charges": 16718.0,
+   "slippage_est": 9288.0,
+   "costs_share_of_gross_abs_pct": 638.2,
+   "costs_pct_of_capital": 40.84,
+   "exit_reasons": {
+    "stop": 690,
+    "target": 236,
+    "squareoff": 86
+   },
+   "trades_per_day": 4.03,
+   "equity_at_start": 63670.0
+  },
+  "bad_2018_full_year": {
+   "days": 245,
+   "total_return_pct": -32.77,
+   "cagr_pct": -33.52,
+   "sharpe": -10.45,
+   "max_dd_pct": -32.77,
+   "trades": 868,
+   "avg_cost_in_r": 0.833,
+   "avg_r_before_costs": 0.084,
+   "median_stop_dist_pct": 0.349,
+   "avg_position_pct_of_capital": 15.7,
+   "win_rate": 0.265,
+   "avg_r": -0.749,
+   "profit_factor": 0.44,
+   "net_pnl": -20424.0,
+   "gross_pnl_before_costs": 3395.0,
+   "charges": 15312.0,
+   "slippage_est": 8507.0,
+   "costs_share_of_gross_abs_pct": 701.5,
+   "costs_pct_of_capital": 38.21,
+   "exit_reasons": {
+    "stop": 600,
+    "target": 201,
+    "squareoff": 67
+   },
+   "trades_per_day": 3.54,
+   "equity_at_start": 62332.0
+  },
+  "bad_2020_feb_mar": {
+   "days": 41,
+   "total_return_pct": -5.43,
+   "cagr_pct": -29.06,
+   "sharpe": -4.15,
+   "max_dd_pct": -7.61,
+   "trades": 139,
+   "avg_cost_in_r": 0.639,
+   "avg_r_before_costs": -0.007,
+   "median_stop_dist_pct": 0.441,
+   "avg_position_pct_of_capital": 17.6,
+   "win_rate": 0.266,
+   "avg_r": -0.646,
+   "profit_factor": 0.62,
+   "net_pnl": -3317.0,
+   "gross_pnl_before_costs": 856.0,
+   "charges": 2682.0,
+   "slippage_est": 1490.0,
+   "costs_share_of_gross_abs_pct": 487.6,
+   "costs_pct_of_capital": 6.83,
+   "exit_reasons": {
+    "stop": 98,
+    "target": 28,
+    "squareoff": 13
+   },
+   "trades_per_day": 3.39,
+   "equity_at_start": 61059.0
+  }
+ },
+ "nifty": {
+  "is": {
+   "days": 494,
+   "total_return_pct": 32.7,
+   "cagr_pct": 15.53,
+   "sharpe": 1.35,
+   "max_dd_pct": -14.55
+  },
+  "oos": {
+   "days": 494,
+   "total_return_pct": 28.72,
+   "cagr_pct": 13.74,
+   "sharpe": 0.65,
+   "max_dd_pct": -38.44
+  },
+  "2017": {
+   "days": 248,
+   "total_return_pct": 28.65,
+   "cagr_pct": 29.17,
+   "sharpe": 2.88,
+   "max_dd_pct": -4.11
+  },
+  "2018": {
+   "days": 246,
+   "total_return_pct": 3.15,
+   "cagr_pct": 3.23,
+   "sharpe": 0.31,
+   "max_dd_pct": -14.55
+  },
+  "2019": {
+   "days": 244,
+   "total_return_pct": 12.02,
+   "cagr_pct": 12.44,
+   "sharpe": 0.91,
+   "max_dd_pct": -11.45
+  },
+  "2020": {
+   "days": 250,
+   "total_return_pct": 14.9,
+   "cagr_pct": 15.03,
+   "sharpe": 0.61,
+   "max_dd_pct": -38.44
+  },
+  "bad_2018_full_year": {
+   "days": 246,
+   "total_return_pct": 3.15,
+   "cagr_pct": 3.23,
+   "sharpe": 0.31,
+   "max_dd_pct": -14.55
+  },
+  "bad_2020_feb_mar": {
+   "days": 40,
+   "total_return_pct": -28.13,
+   "cagr_pct": -87.51,
+   "sharpe": -3.24,
+   "max_dd_pct": -37.63
+  }
+ },
+ "cost_sensitivity_chosen": {
+  "statutory_0.023": {
+   "is": {
+    "days": 491,
+    "total_return_pct": -46.52,
+    "cagr_pct": -27.47,
+    "sharpe": -9.22,
+    "max_dd_pct": -46.7,
+    "trades": 1718,
+    "avg_cost_in_r": 0.664,
+    "avg_r_before_costs": 0.033,
+    "median_stop_dist_pct": 0.322,
+    "avg_position_pct_of_capital": 13.9,
+    "win_rate": 0.255,
+    "avg_r": -0.63,
+    "profit_factor": 0.46,
+    "net_pnl": -46522.0,
+    "gross_pnl_before_costs": 2486.0,
+    "charges": 25218.0,
+    "slippage_est": 23790.0,
+    "costs_share_of_gross_abs_pct": 1971.6,
+    "costs_pct_of_capital": 49.01,
+    "exit_reasons": {
+     "stop": 1218,
+     "target": 364,
+     "squareoff": 136
+    },
+    "trades_per_day": 3.5
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": -46.27,
+    "cagr_pct": -27.11,
+    "sharpe": -6.46,
+    "max_dd_pct": -46.46,
+    "trades": 1884,
+    "avg_cost_in_r": 0.553,
+    "avg_r_before_costs": 0.044,
+    "median_stop_dist_pct": 0.387,
+    "avg_position_pct_of_capital": 13.6,
+    "win_rate": 0.273,
+    "avg_r": -0.509,
+    "profit_factor": 0.56,
+    "net_pnl": -46271.0,
+    "gross_pnl_before_costs": 6480.0,
+    "charges": 27144.0,
+    "slippage_est": 25607.0,
+    "costs_share_of_gross_abs_pct": 814.1,
+    "costs_pct_of_capital": 52.75,
+    "exit_reasons": {
+     "stop": 1322,
+     "target": 419,
+     "squareoff": 143
+    },
+    "trades_per_day": 3.81
+   }
+  },
+  "zero_costs": {
+   "is": {
+    "days": 491,
+    "total_return_pct": 3.97,
+    "cagr_pct": 2.02,
+    "sharpe": 0.65,
+    "max_dd_pct": -4.36,
+    "trades": 1756,
+    "avg_cost_in_r": 0.0,
+    "avg_r_before_costs": 0.017,
+    "median_stop_dist_pct": 0.269,
+    "avg_position_pct_of_capital": 19.3,
+    "win_rate": 0.307,
+    "avg_r": 0.017,
+    "profit_factor": 1.06,
+    "net_pnl": 3970.0,
+    "gross_pnl_before_costs": 3970.0,
+    "charges": 0.0,
+    "slippage_est": 0.0,
+    "costs_share_of_gross_abs_pct": 0.0,
+    "costs_pct_of_capital": 0.0,
+    "exit_reasons": {
+     "stop": 1201,
+     "target": 469,
+     "squareoff": 86
+    },
+    "trades_per_day": 3.58
+   },
+   "oos": {
+    "days": 495,
+    "total_return_pct": 7.98,
+    "cagr_pct": 3.99,
+    "sharpe": 0.88,
+    "max_dd_pct": -4.22,
+    "trades": 1940,
+    "avg_cost_in_r": 0.0,
+    "avg_r_before_costs": 0.025,
+    "median_stop_dist_pct": 0.335,
+    "avg_position_pct_of_capital": 19.3,
+    "win_rate": 0.309,
+    "avg_r": 0.025,
+    "profit_factor": 1.08,
+    "net_pnl": 7980.0,
+    "gross_pnl_before_costs": 7980.0,
+    "charges": 0.0,
+    "slippage_est": 0.0,
+    "costs_share_of_gross_abs_pct": 0.0,
+    "costs_pct_of_capital": 0.0,
+    "exit_reasons": {
+     "stop": 1318,
+     "target": 517,
+     "squareoff": 105
+    },
+    "trades_per_day": 3.92
+   }
+  }
+ },
+ "chosen_period_note": "IS/OOS runs each start at capital 100000 and compound; per-year and bad-period stats are slices of those runs, measured from the equity at the slice start.",
+ "verdict": "REJECT. All 8 combos lose ~55-70% IS (2017-18) and OOS (2019-20) vs Nifty +33%/+29%. Gross edge ~+0.03-0.05R/trade; configured round-trip costs ~0.28% vs median stop 0.32-0.39% => ~0.75-0.9R cost per trade. Zero-cost OOS only +8% over 2y (Sharpe 0.88). Only beat Nifty in Feb-Mar 2020 (-5.4% vs -28.1%) by being small and flat overnight, still losing. Data: shabbirhasan1/nse-data 1-min, 15 large caps, hindsight universe.",
+ "data_source": {
+  "repo": "https://github.com/shabbirhasan1/nse-data",
+  "folder": "NSE Minute Data/NSE_Stocks_Data",
+  "download_mb_csv": 325,
+  "git_objects_mb": 86,
+  "note": "debaonline4u/NSE-Data current tree has only daily CSVs + Google Drive links; TCS, TATASTEEL, HINDUNILVR absent, replaced by HDFC, SUNPHARMA, ASIANPAINT"
+ }
+}
