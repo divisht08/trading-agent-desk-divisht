@@ -74,7 +74,10 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
         equity += pnl
         day = str(ts.date())
         daily_pnl[day] = daily_pnl.get(day, 0.0) + pnl
-        trades.append({"symbol": sym, "date": day, "pnl": pnl, "r": pnl / pos["risk"], "reason": reason})
+        trades.append({"symbol": sym, "date": day, "pnl": pnl, "r": pnl / pos["risk"], "reason": reason,
+                       "entry_time": pos["time"], "entry": round(pos["entry"], 2), "qty": pos["qty"],
+                       "stop": round(pos["stop"], 2), "target": round(pos["target"], 2),
+                       "exit_time": str(ts.time())[:5], "exit": round(fill, 2)})
 
     for ts, group in allbars.groupby("date", sort=True):
         day = ts.date()
@@ -102,7 +105,7 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
                         if d.ok:
                             open_pos[sym] = {"entry": fill, "qty": d.qty, "stop": sig.stop,
                                              "target": fill + p["target_r"] * (fill - sig.stop),
-                                             "risk": (fill - sig.stop) * d.qty}
+                                             "risk": (fill - sig.stop) * d.qty, "time": str(ts.time())[:5]}
                             traded_today.add(sym)
             # 2) manage open position within this bar
             if sym in open_pos:
@@ -111,7 +114,7 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
                     close(sym, min(float(bar["open"]), pos["stop"]), "stop", ts)
                 elif bar["high"] >= pos["target"]:
                     close(sym, max(float(bar["open"]), pos["target"]), "target", ts)
-                elif ts.time() >= t_sq or halted:
+                elif (ts + pd.Timedelta(minutes=5)).time() > t_sq or halted:   # bar ends after square-off time
                     close(sym, float(bar["close"]), "squareoff", ts)
                 continue
             # 3) look for a new signal on completed bars (this bar just closed)
@@ -122,6 +125,9 @@ def run(data: dict[str, pd.DataFrame], cfg: Config, params: dict | None = None,
             if sig:
                 pending[sym] = sig
 
+    for sym in list(open_pos):                      # data ended before square-off: close at last close
+        last = data[sym][data[sym]["date"].dt.date == cur_day].iloc[-1]
+        close(sym, float(last["close"]), "eod", pd.Timestamp(last["date"]))
     return summarize(trades, capital, daily_pnl)
 
 

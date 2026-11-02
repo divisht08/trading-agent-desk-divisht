@@ -62,7 +62,7 @@ universe:                         # liquid NSE large caps; edit freely
   - AXISBANK
   - KOTAKBANK
   - TATASTEEL
-  - TATAMOTORS
+  - TMPV                          # Tata Motors Passenger Vehicles (TATAMOTORS was demerged in 2025)
   - MARUTI
   - SUNPHARMA
   - M&M

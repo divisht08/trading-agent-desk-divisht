@@ -31,7 +31,7 @@ def intraday_orb(symbol: str, bars5: pd.DataFrame, p: dict, now_ts: pd.Timestamp
         return None
     day = bars5[bars5["date"].dt.date == now_ts.date()].reset_index(drop=True)
     n_or = max(1, p["opening_range_minutes"] // 5)
-    if len(day) <= n_or + 1:
+    if len(day) <= n_or:                     # need at least one completed bar after the range
         return None
     rng = day.iloc[:n_or]
     or_high, or_low = rng["high"].max(), rng["low"].min()

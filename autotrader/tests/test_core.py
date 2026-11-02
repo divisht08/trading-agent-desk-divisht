@@ -121,3 +121,16 @@ def test_engine_disables_unvalidated_strategies(tmp_path, monkeypatch):
     eng = Engine(c, PaperBroker(FakeData({}), c["costs"]), Store(str(tmp_path / "b.db")))
     assert eng.cfg["strategies"]["swing_trend"]["enabled"] and eng.cfg["strategies"]["swing_trend"]["breakout_lookback"] == 55
     assert not eng.cfg["strategies"]["intraday_orb"]["enabled"]
+
+
+def test_orb_can_fire_on_first_bar_after_range():
+    from agent.strategies import intraday_orb
+    p = cfg()["strategies"]["intraday_orb"]
+    prev = [{"date": pd.Timestamp("2026-10-30 15:10") - pd.Timedelta(minutes=5 * i), "open": 100, "high": 100.3,
+             "low": 99.7, "close": 100, "volume": 1000.0} for i in range(20)][::-1]
+    today = [("09:15", 100, 101, 99.5, 100.5, 1000), ("09:20", 100.5, 100.8, 100, 100.4, 1000),
+             ("09:25", 100.4, 100.9, 100.1, 100.6, 1000), ("09:30", 100.6, 101.4, 100.5, 101.3, 5000)]
+    rows = prev + [{"date": pd.Timestamp(f"2026-11-02 {t}"), "open": o, "high": h, "low": l, "close": c,
+                    "volume": float(v)} for t, o, h, l, c, v in today]
+    df = pd.DataFrame(rows)
+    assert intraday_orb("X", df, p, pd.Timestamp("2026-11-02 09:35")) is not None
