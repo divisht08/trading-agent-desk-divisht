@@ -145,6 +145,12 @@ ahead of Nifty after charges, with a drawdown you'd accept with real money. Then
 The Claude debate can't be backtested fairly, because the model already knows how past prices played
 out. Judge it from Test-mode results.
 
+## Autotrader (separate agent)
+
+[`autotrader/`](autotrader/README.md) is a second, independent agent: intraday opening-range breakouts and
+multi-week trend trades, a hard risk layer, and a walk-forward backtest gate that must pass before a strategy
+can trade. It shares no code with the desk above. How it sets up trades: [autotrader/docs/HOW_TRADES_ARE_MADE.md](autotrader/docs/HOW_TRADES_ARE_MADE.md).
+
 ## Development
 
 ```bash
